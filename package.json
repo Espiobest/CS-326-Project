@@ -1,0 +1,55 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Espiobest/CS-326-Project"
+  },
+  "bugs": "",
+  "keywords": [],
+  "author": {
+    "name": "Team 36",
+    "email": "",
+    "url": ""
+  },
+  "contributors": [
+    {
+      "name": "Ayush Ravi Chandran",
+      "github": "Espiobest"
+    },
+    {
+      "name": "Divyansh Shivashok",
+      "github": "coolkite"
+    },
+    {
+      "name": "Om Mehta",
+      "github": "louis-e"
+    },
+    {
+      "name": "Ayomide Olubanwo",
+      "github": "ayyo-ayyo"
+    }
+  ],
+  "scripts": {
+    "dev": "",
+    "test": "",
+    "milestone-01": "http-server src/docs/milestone-01 -p 3000 -c-1 -o -s",
+    "validate-html": "html-validate 'src/**/*.html'",
+    "prettier": "prettier src —write"
+  },
+  "devDependencies": {
+    "html-validate": "^8.11.1",
+    "http-server": "^14.1.1",
+    "prettier": "^3.2.5"
+  }
+}
