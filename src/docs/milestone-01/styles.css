@@ -31,6 +31,18 @@ nav a:hover{
     text-decoration: underline;
 }
 
+.unselectable{
+    user-select: none;
+}
+
+.card{
+    transition: 0.5s;
+}
+
+.card:hover{
+    margin-top: -10px;
+}
+
 #overview {
     font-family: Arial;
     color: #564d4a;
