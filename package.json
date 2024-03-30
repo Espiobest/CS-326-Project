@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "JobsForUMass",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,8 +19,7 @@
   "keywords": [],
   "author": {
     "name": "Team 36",
-    "email": "",
-    "url": ""
+    "url": "https://github.com/Espiobest/CS-326-Project"
   },
   "contributors": [
     {

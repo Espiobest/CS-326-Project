@@ -3,38 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Title</title>
+    <title>JobsForUMass</title>
     <!-- CSS Stylesheets -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <!-- JavaScript Files -->
     <script type="module" src="script.js" defer></script>
 </head>
 <body>
-    <header>
-        <!-- Navigation bar, logo, etc. -->
+    <header id="vision">
+        <h1 style="background-color:#ba1b1d" class="py-5 text-2xl leading-none tracking-tight md:text-4xl text-center font-extrabold">JobsForUMass</h1>
+         <!-- Navigation bar, logo, etc. -->
+        <nav class="bg-white border-gray-200" style="background-color: #ff6663;">
+            <!-- Links to different sections/pages -->
+            <div class="max-w-screen-xl flex justify-center items-center px-4 py-2 mx-auto">
+                <div class="flex space-x-10">
+                <a href="#team" class="text-white">Team</a>
+                <a href="#overview" class="text-white">Overview</a>
+                <a href="#application-parts" class="text-white">Features</a>
+                <a href="#data-requirements" class="text-white">Data Requirements</a>
+                <a href="#wire-frames" class="text-white">Wireframes</a>
+                <a href="#real-world" class="text-white">Real-World Examples</a>
+                <a href="#integrative-experience" class="text-white">Integrative Experience</a>
+                </div>
+            </div>
+        </nav>
+        <section id="team">
+            <h2 class="mb-2 text-l leading-none md:text-2xl text-center font-bold">Team Members</h2>
+
+            <div class="px-4 md:px-10 flex flex-wrap justify-center">
+                <div style="background-color: #f7f4f3" class="mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                    <img class="rounded-full object-contain p-2" src="assets/Ayush.jpeg" alt="Ayush Ravi Chandran">
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl mb-2">Ayush Ravi Chandran</div>
+                        <p class="text-gray-700 text-base">
+                            Backend Engineer
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="background-color: #f7f4f3" class="mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                    <img class="rounded-full object-contain p-2" src="assets/Om.jpeg" alt="Om Mehta">
+                    <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">Om Mehta</div>
+                    <p class="text-gray-700 text-base">
+                        Project Manager
+                    </p>
+                    </div>
+                </div>
+
+                <div style="background-color: #f7f4f3" class="mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                    <img class="rounded-full object-contain p-2" src="assets/Divyansh.jpeg" alt="Divyansh Shivashok">
+                    <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">Divyansh Shivashok</div>
+                    <p class="text-gray-700 text-base">
+                        Backend Engineer
+                    </p>
+                    </div>
+                </div>
+
+                <div style="background-color: #f7f4f3" class="mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                    <img class="rounded-full object-contain p-2" src="assets/Ayo.jpeg" alt="Ayomide Olubanwo">
+                    <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">Ayomide Olubanwo</div>
+                    <p class="text-gray-700 text-base">
+                        Frontend Engineer
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </header>
-
-    <nav>
-        <!-- Links to different sections/pages -->
-    </nav>
-
+    <br>    
     <main>
         <!-- Main content of the document -->
-        <article>
+        <section id="overview" class="mb-10">
             <!-- Primary content like a blog post or article -->
-        </article>
-
-        <section>
-            <!-- Related content or subsections -->
+            <h2 class="ms-2 font-semibold text-center md:text-2xl">Overview</h2>
+            <p class="m-2 text-md">
+                <span class="font-semibold">JobsForUMass</span> aims to revolutionize the internship and employment search process for students within the University of Massachusetts System. Our platform addresses the challenges of connecting students with on-campus and off-campus jobs while offering students and employers a streamlined process to find talented candidates.
+                <br><br>
+                Existing solutions, most notably the UMass Job Board, are very limited in the scope of their approach. They function primarily as listing pages that have no defined user journey in terms of engaging with the website. Employers do not have access to a dashboard to track applicants and have to manually scan emails for applications.
+                <br><br>
+                JobsForUMass aims to provide a centralized hub for job listings, application management and community engagement. JobsForUMass serves as a catalyst for bridging the gap between academic learning and real-world experience, and also solves the headache of stressful on-campus job applications.
+                <br><br>
+                Designed specifically for students across various disciplines within the UMass system, including undergraduate and graduate students, the platform caters to a diverse array of individuals who want on-campus jobs to save up a few bucks, or project-based internships to complement their studies and enhance their skill sets. Additionally, employers ranging from UMass authorities to local startups can leverage the platform to tap into the diverse talent pool within the UMass community.
+                <br><br>
+                Through JobsForUMass, our vision is to empower students to explore meaningful internship opportunities that align with their academic and career aspirations while providing employers with access to a dynamic pool of motivated and capable candidates.
+            </p>
         </section>
 
-        <aside>
-            <!-- Side content like ads, links to other posts, or author info -->
-        </aside>
+        <section id="application-parts" class="mb-10">
+            <!-- Related content or subsections -->
+            <h2 class="ms-2 font-semibold text-center md:text-2xl">Application Parts</h2>
+            <div class="flex flex-col items-center justify-center">
+                <button id="expand" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded content-center">Expand All</button>
+            </div>
+            <div class="cursor-pointer">
+                <div id="collapsible-1" class="collapsible">
+                    <span id="part-1" class="text-center" style="user-select: none;">Job Listings and Search Functionality</span>
+                    <span id="arrow-1" class="arrow">▾</span>
+                </div>
+                <div id="description-1" class="description hidden">
+                    <p>The heart of the JobsForUMass lies in its comprehensive internship listings and robust search functionality. This component allows employers to post jobs and internship opportunities. Students can easily search and filter through these listings based on criteria such as industry, hours, duration, location, work-study status, enabling them to find jobs/internships that align with their academic pursuits and career goals.</p>
+                </div>
+            </div>
+        
+            <div class="cursor-pointer">
+                <div id="collapsible-2" class="collapsible">
+                    <span id="part-2" class="text-center" style="user-select: none;">User Profile</span>
+                    <span id="arrow-2" class="arrow">▾</span>
+                </div>
+                <div id="description-2" class="description hidden">
+                    <p>Each user provides basic personal information such as name, contact details, major, graduation year, and a personal statement that helps employers to identify suitable candidates and allow students to connect with peers. Users can integrate their social media profiles, such as LinkedIn, GitHub, or personal websites to their user profiles to add credibility to their profiles. Employers can view user profiles to gauge degree of fit to the organization.</p>
+                </div>
+            </div>
+        
+            <div class="cursor-pointer">
+                <div id="collapsible-3" class="collapsible">
+                    <span id="part-3" class="text-center" style="user-select: none;">Application Management System</span>
+                    <span id="arrow-3" class="arrow">▾</span>
+                </div>
+                <div id="description-3" class="description hidden">
+                    <p>This component facilitates efficient communication between students and employers by providing an intuitive application management system. Students can submit their applications directly through the platform, track the status of their applications, and receive notifications for updates or interview requests from employers. Employers, on the other hand, can review applications, manage candidate profiles, and communicate decisions within the same system. By centralizing the application process, this component enhances transparency, reduces administrative burden, and ensures a seamless experience for both students and employers.</p>
+                </div>
+            </div>
+            
+        </section>
+
+        <section id="data-requirements" class="mb-10">
+            <h2 class="ms-2 font-semibold text-center md:text-2xl">Data Requirements</h2>
+            <p class="m-2 text-md">
+                JobsForUMass will handle a lot of key application data in terms of user profiles, job listings, application materials and tracking data.
+                <br><br>
+                A key aspect of our platform is user profiles, which store essential information about students and employers. Student profiles include information like names, contact information, academic institutions, majors and application materials like a resume that are tied to the student data. Employer data will include essential information like name of organization, location, website, contact information.
+                <br><br>
+                Another important feature of our website is comprehensive job/internship listings that are provided by employers. Each listing includes details like job title, descriptions, responsibilities, type of job (work-study or not), hourly rate, and duration. Additionally, listings may feature data such as industry categories, application-specific questions, skill requirements, application deadlines. Efficient data handling of internship listings ensures that users can access up-to-date information about available opportunities and make informed decisions about their applications.
+                <br><br>
+                The program also handles data related to internship applications submitted by students. This includes application forms that contain relevant information like user profiles, resumes, specific covered letters, relevant work experiences, additional documents, answers to specific questions. Application data also includes timestamps when applications were submitted, reviewed, shortlisted, or rejected, along with relevant communication from the employers (and maybe an optional individual feedback section). Managing application data effectively allows for streamlined application processing, status tracking, and communication between applicants and employers.
+                <br><br>
+                An additional set of data is analytics surrounding the entire process: particularly for employers, it'd be very helpful to see total number of job applications, total number of candidates hired, hiring ratios, time taken to review per listing, etc. Students would have access to the employer's previous listings' hire rate.
+                <br><br>
+                By addressing these key data requirements, JobsForUMass can effectively connect students with opportunities, facilitate seamless application management, and foster a vibrant community of learning and professional development within the UMass ecosystem. Efficient data handling ensures that users have access to accurate, relevant information and enables the platform to fulfill its mission of providing a comprehensive solution for job seekers amongst the UMass student population.
+            </p>
+        </section>
+
+        <section id="wire-frames" class="mb-10">
+            <h2 class="ms-2 font-semibold text-center md:text-2xl">Wireframes</h2>
+
+        </section>
+
+        <section id="real-world" class="mb-10">
+            <h2 class="ms-2 font-semibold text-center md:text-2xl">Real-World Examples</h2>
+
+        </section>
+
+        <section id="integrative-experience" class="mb-10">
+            <h2 class="ms-2 font-semibold text-center md:text-2xl">Integrative Experience</h2>
+        
+        </section>
     </main>
 
     <footer>
         <!-- Footer content like copyright, links to privacy policy, etc. -->
+        <p style="background-color:#ba1b1d" class="py-5 leading-none tracking-tight text-center">&copy; Copyright 2024 JobsForUMass Team. All Rights Reserved.</p>
     </footer>
 </body>
 </html>

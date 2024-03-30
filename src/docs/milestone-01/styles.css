@@ -1,0 +1,83 @@
+* {
+    scroll-behavior: smooth !important;
+}
+
+
+h2 {
+    font-family: Arial;
+    text-align: center;
+    color: #564d4a;
+}
+
+section{
+    scroll-behavior: smooth;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+ol {
+    font-family: Arial;
+}
+
+p span{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+nav a:hover{
+    text-decoration: underline;
+}
+
+#overview {
+    font-family: Arial;
+    color: #564d4a;
+} 
+
+#collapsible-1, #collapsible-2, #collapsible-3{
+    background-color: #7F1F3A;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid gray;
+    overflow: hidden;
+}
+
+#collapsible-1{
+    border-radius: 15px 15px 0px 0px;
+}
+
+#collapsible-1:hover, #collapsible-2:hover, #collapsible-3:hover {
+    background-color: #984b61;
+}
+
+.collapsible{
+    background-color: #7F1F3A;
+    font-weight: 400;
+}
+
+.active {
+    background-color: #984b61 !important;
+    font-weight: 700 !important;
+}
+
+span {
+    pointer-events: none;
+}
+
+.description {
+    font-family: Arial;
+    color: #564d4a;
+    background-color: #f7f4f3;
+    padding: 0px 8px 0px;
+    border: 1px solid gray;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
