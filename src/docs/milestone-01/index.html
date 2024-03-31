@@ -12,9 +12,9 @@
 </head>
 <body>
     <header id="vision">
-        <h1 style="background-color:#ba1b1d" class="py-5 text-2xl leading-none tracking-tight md:text-4xl text-center font-extrabold">JobsForUMass</h1>
+        <h1 class="heading py-5 text-2xl leading-none tracking-tight md:text-4xl text-center font-extrabold">JobsForUMass</h1>
          <!-- Navigation bar, logo, etc. -->
-        <nav class="bg-white border-gray-200" style="background-color: #ff6663;">
+        <nav class="navbar">
             <!-- Links to different sections/pages -->
             <div class="max-w-screen-xl flex justify-center items-center px-4 py-2 mx-auto">
                 <div class="flex space-x-10">
@@ -32,7 +32,7 @@
             <h2 class="mb-2 text-l leading-none md:text-2xl text-center font-bold">Team Members</h2>
 
             <div class="px-4 md:px-10 flex flex-wrap justify-center">
-                <div style="background-color: #f7f4f3" class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                <div class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
                     <img class="rounded-full object-contain p-2" src="assets/Ayush.jpeg" alt="Ayush Ravi Chandran">
                     <div class="px-6 py-4">
                         <div class="font-bold text-xl mb-2">Ayush Ravi Chandran</div>
@@ -41,8 +41,7 @@
                         </p>
                     </div>
                 </div>
-                
-                <div style="background-color: #f7f4f3" class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                <div class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
                     <img class="rounded-full object-contain p-2" src="assets/Om.jpeg" alt="Om Mehta">
                     <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2">Om Mehta</div>
@@ -52,7 +51,7 @@
                     </div>
                 </div>
 
-                <div style="background-color: #f7f4f3" class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                <div class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
                     <img class="rounded-full object-contain p-2" src="assets/Divyansh.jpeg" alt="Divyansh Shivashok">
                     <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2">Divyansh Shivashok</div>
@@ -62,7 +61,7 @@
                     </div>
                 </div>
 
-                <div style="background-color: #f7f4f3" class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
+                <div class="card mr-5 md:mr-0 max-w-xs rounded overflow-hidden shadow-lg">
                     <img class="rounded-full object-contain p-2" src="assets/Ayo.jpeg" alt="Ayomide Olubanwo">
                     <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2">Ayomide Olubanwo</div>
@@ -74,7 +73,7 @@
             </div>
         </section>
     </header>
-    <br>    
+    <br>
     <main>
         <!-- Main content of the document -->
         <section id="overview" class="mb-10">
@@ -97,7 +96,7 @@
             <!-- Related content or subsections -->
             <h2 class="ms-2 font-semibold text-center md:text-2xl">Application Parts</h2>
             <div class="flex flex-col items-center justify-center">
-                <button id="expand" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded content-center">Expand All</button>
+                <button type="button" id="expand" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded content-center">Expand All</button>
             </div>
             <div class="cursor-pointer">
                 <div id="collapsible-1" class="collapsible">
@@ -107,7 +106,6 @@
                     <p>The heart of the JobsForUMass lies in its comprehensive internship listings and robust search functionality. This component allows employers to post jobs and internship opportunities. Students can easily search and filter through these listings based on criteria such as industry, hours, duration, location, work-study status, enabling them to find jobs/internships that align with their academic pursuits and career goals.</p>
                 </div>
             </div>
-        
             <div class="cursor-pointer">
                 <div id="collapsible-2" class="collapsible">
                     <span id="part-2" class="text-center unselectable">User Profile</span><span id="arrow-2" class="arrow unselectable">▾</span>
@@ -116,7 +114,6 @@
                     <p>Each user provides basic personal information such as name, contact details, major, graduation year, and a personal statement that helps employers to identify suitable candidates and allow students to connect with peers. Users can integrate their social media profiles, such as LinkedIn, GitHub, or personal websites to their user profiles to add credibility to their profiles. Employers can view user profiles to gauge degree of fit to the organization.</p>
                 </div>
             </div>
-        
             <div class="cursor-pointer">
                 <div id="collapsible-3" class="collapsible">
                     <span id="part-3" class="text-center unselectable">Application Management System</span><span id="arrow-3" class="arrow unselectable">▾</span>
@@ -125,7 +122,6 @@
                     <p>This component facilitates efficient communication between students and employers by providing an intuitive application management system. Students can submit their applications directly through the platform, track the status of their applications, and receive notifications for updates or interview requests from employers. Employers, on the other hand, can review applications, manage candidate profiles, and communicate decisions within the same system. By centralizing the application process, this component enhances transparency, reduces administrative burden, and ensures a seamless experience for both students and employers.</p>
                 </div>
             </div>
-            
         </section>
 
         <section id="data-requirements" class="mb-10">
@@ -157,13 +153,12 @@
 
         <section id="integrative-experience" class="mb-10">
             <h2 class="ms-2 font-semibold text-center md:text-2xl">Integrative Experience</h2>
-        
         </section>
     </main>
 
     <footer>
         <!-- Footer content like copyright, links to privacy policy, etc. -->
-        <p style="background-color:#ba1b1d" class="py-5 leading-none tracking-tight text-center">&copy; Copyright 2024 JobsForUMass Team. All Rights Reserved.</p>
+        <p class="footer py-5 leading-none tracking-tight text-center">&copy; Copyright 2024 JobsForUMass Team. All Rights Reserved.</p>
     </footer>
 </body>
 </html>
