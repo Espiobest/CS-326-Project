@@ -21,21 +21,25 @@
     "name": "Team 36",
     "url": "https://github.com/Espiobest/CS-326-Project"
   },
-  "contributors": [
+  "collaborators": [
     {
       "name": "Ayush Ravi Chandran",
+      "email": "ayushravicha@umass.edu",
       "github": "Espiobest"
     },
     {
       "name": "Divyansh Shivashok",
+      "email": "dshivashok@umass.edu",
       "github": "coolkite"
     },
     {
       "name": "Om Mehta",
+      "email": "omehta@umass.edu",
       "github": "louis-e"
     },
     {
       "name": "Ayomide Olubanwo",
+      "email": "aolubanwo@umass.edu",
       "github": "ayyo-ayyo"
     }
   ],
