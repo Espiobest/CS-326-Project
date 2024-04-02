@@ -89,6 +89,16 @@ span {
   background-color: #f7f4f3;
   padding: 0px 8px 0px;
   border: 1px solid gray;
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.15s ease-in;
+
+}
+
+.description.show {
+  height: 99px;
+  transition: height 0.15s ease-out;
+
 }
 
 .container {

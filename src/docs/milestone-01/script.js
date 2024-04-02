@@ -3,7 +3,7 @@ function collapse(e) {
   e.target.classList.toggle("active");
 
   let description = document.getElementById("description-" + id);
-  description.classList.toggle("hidden");
+  description.classList.toggle("show");
 
   let arrow = document.getElementById("arrow-" + id);
   arrow.innerHTML = arrow.innerHTML == "▴" ? "▾" : "▴";
@@ -13,7 +13,7 @@ function collapse(e) {
   let allExpanded = true;
 
   for (let i = 0; i < descriptions.length; i++) {
-    if (descriptions[i].classList.contains("hidden")) {
+    if (!descriptions[i].classList.contains("show")) {
       allExpanded = false;
       break;
     }
@@ -33,22 +33,27 @@ function openAll() {
   if (btn.innerHTML == "Expand All") {
     btn.innerHTML = "Collapse All";
     for (let i = 0; i < descriptions.length; i++) {
-      descriptions[i].classList.remove("hidden");
+      descriptions[i].classList.add("show");
     }
+    for (let i = 0; i < collapsibles.length; i++) {
+      collapsibles[i].classList.add("active");
+    }
+    for (let i = 0; i < arrows.length; i++) {
+      arrows[i].innerHTML = "▴";
+    }
+
   } else {
     btn.innerHTML = "Expand All";
     let descriptions = document.getElementsByClassName("description");
     for (let i = 0; i < descriptions.length; i++) {
-      descriptions[i].classList.add("hidden");
+      descriptions[i].classList.remove("show");
     }
-  }
-
-  for (let i = 0; i < collapsibles.length; i++) {
-    collapsibles[i].classList.toggle("active");
-  }
-
-  for (let i = 0; i < arrows.length; i++) {
-    arrows[i].innerHTML = arrows[i].innerHTML == "▴" ? "▾" : "▴";
+    for (let i = 0; i < collapsibles.length; i++) {
+      collapsibles[i].classList.remove("active");
+    }
+    for (let i = 0; i < arrows.length; i++) {
+      arrows[i].innerHTML = "▾";
+    }
   }
 }
 
