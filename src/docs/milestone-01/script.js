@@ -34,24 +34,15 @@ function openAll() {
     btn.innerHTML = "Collapse All";
     for (let i = 0; i < descriptions.length; i++) {
       descriptions[i].classList.add("show");
-    }
-    for (let i = 0; i < collapsibles.length; i++) {
       collapsibles[i].classList.add("active");
-    }
-    for (let i = 0; i < arrows.length; i++) {
       arrows[i].innerHTML = "▴";
     }
-
   } else {
     btn.innerHTML = "Expand All";
     let descriptions = document.getElementsByClassName("description");
     for (let i = 0; i < descriptions.length; i++) {
       descriptions[i].classList.remove("show");
-    }
-    for (let i = 0; i < collapsibles.length; i++) {
       collapsibles[i].classList.remove("active");
-    }
-    for (let i = 0; i < arrows.length; i++) {
       arrows[i].innerHTML = "▾";
     }
   }

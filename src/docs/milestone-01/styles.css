@@ -92,13 +92,11 @@ span {
   height: 0px;
   overflow: hidden;
   transition: height 0.15s ease-in;
-
 }
 
 .description.show {
   height: 99px;
   transition: height 0.15s ease-out;
-
 }
 
 .container {
