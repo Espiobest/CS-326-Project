@@ -100,6 +100,13 @@ span {
   transition: max-height 0.15s cubic-bezier(1, 0, 1,0);
 }
 
+.wireframe{
+  width: 80vh;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .container {
   display: flex;
   justify-content: center;
