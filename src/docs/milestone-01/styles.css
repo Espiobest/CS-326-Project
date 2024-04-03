@@ -97,10 +97,10 @@ span {
 
 .description.show {
   max-height: 1000px;
-  transition: max-height 0.15s cubic-bezier(1, 0, 1,0);
+  transition: max-height 0.15s cubic-bezier(1, 0, 1, 0);
 }
 
-.wireframe{
+.wireframe {
   width: 80vh;
   height: auto;
   margin-left: auto;
