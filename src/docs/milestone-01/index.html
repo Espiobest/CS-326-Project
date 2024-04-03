@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>JobsForUMass</title>
     <!-- CSS Stylesheets -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,15 +16,18 @@
          <!-- Navigation bar, logo, etc. -->
         <nav class="navbar">
             <!-- Links to different sections/pages -->
-            <div class="max-w-screen-xl flex justify-center items-center px-4 py-2 mx-auto">
-                <div class="flex space-x-10">
-                <a href="#team" class="text-white">Team</a>
-                <a href="#overview" class="text-white">Overview</a>
-                <a href="#application-parts" class="text-white">Features</a>
-                <a href="#data-requirements" class="text-white">Data Requirements</a>
-                <a href="#wire-frames" class="text-white">Wireframes</a>
-                <a href="#real-world" class="text-white">Real-World Examples</a>
-                <a href="#integrative-experience" class="text-white">Integrative Experience</a>
+            <div class="flex flex-wrap justify-center items-center px-4 py-2 mx-auto">
+                <div class="inline-flex space-x-10 md: space-x-5 sm: space-x-0 sm: text-xs p-2">
+                    <a href="#team" class="text-white">Team</a>
+                    <a href="#overview" class="text-white">Overview</a>
+                    <a href="#application-parts" class="text-white">Features</a>
+                    <a href="#data-requirements" class="text-white">Data Requirements</a>
+                </div>
+                <div class="ml-5 inline-flex space-x-10 md: space-x-5 sm: space-x-0 sm: text-xs">
+                    <a href="#wire-frames" class="text-white">Wireframes</a>
+                    <a href="#real-world" class="text-white hidden md:block">Real-World Examples</a>
+                    <a href="#real-world" class="text-white sm:block md:hidden">Real-World</a>
+                    <a href="#integrative-experience" class="text-white">Integrative Experience</a>
                 </div>
             </div>
         </nav>
