@@ -194,5 +194,3 @@ function layoutJobList(jobList) {
   });
   return jobDivList;
 }
-
-
