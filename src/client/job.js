@@ -1,4 +1,4 @@
-class Job {
+export class Job {
     constructor(id, title, brief, pay, skills, hours, name, location, description) {
       this._id = id;
       this._title = title;
@@ -82,7 +82,4 @@ class Job {
     set description(value) {
       this._description = value;
     }
-
 }
-  
-  module.exports = Job;
