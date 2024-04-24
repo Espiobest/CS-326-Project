@@ -1,11 +1,14 @@
+import { Events } from "./Events.js";
 export class CurrentJob {
+    #events = null;
     constructor(job) {
+        this.#events = Events.events()
         this.job = job;
     }
 
     async render() {
         const curJobDiv = document.createElement('div');
-        curJobDiv.classList.add('bg-slate-200', 'rounded-lg', 'p-5', 'overflow-clip', 'h-screen');
+        curJobDiv.classList.add('w-1/2','bg-slate-200', 'rounded-lg', 'p-5', 'overflow-clip', 'h-screen');
 
         const h1 = document.createElement('h1');
         h1.classList.add('text-3xl');
@@ -50,16 +53,18 @@ export class CurrentJob {
         applyBtn.type = 'button';
         applyBtn.value = 'Apply';
         applyBtn.classList.add('bg-blue-300', 'rounded-md', 'p-1', 'ml-5');
+        applyBtn.addEventListener('click', () => this.#events.publish('applied to job', this.job));
         location.appendChild(applyBtn);
         curJobDiv.appendChild(location);
 
         const description = document.createElement('div');
-        description.classList.add('overflow-scroll', 'h-full');
+        description.classList.add('h-screen','overflow-y-scroll',  'w-full');
         const fullJob = document.createElement('p');
         fullJob.textContent = `Full Job description: \n`;
         fullJob.appendChild(document.createTextNode(this.job._description));
         description.appendChild(fullJob);
         curJobDiv.appendChild(description);
+        
 
         return curJobDiv;
     }
