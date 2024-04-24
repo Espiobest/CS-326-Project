@@ -1,7 +1,7 @@
 import { jobSpoof } from './job.js';
 
 import { NavBar } from './NavBar.js';
-import { Store } from './store.js';
+import * as db from "./db.js";
 import { User } from './user.js';
 
 import { Events } from './Events.js';
@@ -15,14 +15,19 @@ export class App {
   #jobBoardViewElm = null;
     #events = null;
   constructor() {
-    this.user = Store.store().get("user") || new User();
-    Store.store().set("user", this.user);
+    this.db = db;
+    this.db.initDB();
+    this.user = null;
     this.#events = Events.events();
-    this.jobs =  Store.store().get("jobs") || jobSpoof();
-    
+    this.jobs = null;
   }
 
   async render(root) {
+    this.user = await db.getUser();
+    this.jobs = await db.loadJobs();
+    if (this.jobs.length === 0){
+      this.jobs = jobSpoof();
+    }
     const rootElm = document.getElementById(root);
     rootElm.innerHTML = '';
 
@@ -33,6 +38,8 @@ export class App {
 
     this.#mainViewElm = document.createElement('div');
     this.#mainViewElm.id = 'main-view';
+    this.#mainViewElm.maxHeight = '100vh';
+    // this.#mainViewElm.classList.add('bg-slate-100', 'h-screen', 'overflow-y-auto')
 
     rootElm.appendChild(navbarElm);
     rootElm.appendChild(this.#mainViewElm);
@@ -56,9 +63,9 @@ export class App {
       this.jobs = this.jobs.filter(jobListing => {
         return !(JSON.stringify(job) === JSON.stringify(jobListing))
       });
-      Store.store().set("jobs", this.jobs);
+      await db.modifyJob(this.jobs);
       this.user._jobsApplied.push(job);
-      Store.store().set("user", this.user);
+      await db.modifyUser(this.user);
       this.#jobBoardViewElm.removeChild(curJobElm);
       this.#jobBoardViewElm.removeChild(jobListElm);
 

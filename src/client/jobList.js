@@ -10,7 +10,7 @@ export class jobList {
     
     async render() {
         const rootElm = document.createElement('div');
-        rootElm.classList.add('w-1/2', 'bg-white', 'h-screen', 'overflow-y-scroll', 'rounded');
+        rootElm.classList.add('w-1/2',  'bg-white', 'h-screen', 'overflow-y-auto', 'rounded');
 
         for (const index in this.jobs) {
             const job = this.jobs[index];

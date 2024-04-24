@@ -5,7 +5,7 @@ export class JobListItem {
 
     async render() {
         const curJobDiv = document.createElement('div');
-        curJobDiv.classList.add('bg-slate-200', 'rounded-lg', 'p-5', "mb-5");
+        curJobDiv.classList.add('bg-slate-200', 'rounded-lg', 'p-5', 'mb-5');
         curJobDiv.id = `job-${this.job.id}`
 
         const h1 = document.createElement('h1');

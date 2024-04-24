@@ -8,7 +8,7 @@ export class CurrentJob {
 
     async render() {
         const curJobDiv = document.createElement('div');
-        curJobDiv.classList.add('w-1/2','bg-slate-200', 'rounded-lg', 'p-5', 'overflow-clip', 'h-screen');
+        curJobDiv.classList.add('w-1/2','bg-slate-200', 'rounded-lg', 'p-5', 'h-screen');
 
         const h1 = document.createElement('h1');
         h1.classList.add('text-3xl');

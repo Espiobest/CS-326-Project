@@ -57,6 +57,8 @@
     "prettier": "^3.2.5"
   },
   "dependencies": {
+    "pouchdb": "^8.0.1",
+    "pouchdb-upsert": "^2.2.0",
     "underscore": "^1.13.6"
   }
 }
