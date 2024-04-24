@@ -20,14 +20,16 @@ export class JobListItem {
         const skills = document.createElement('p');
         skills.classList.add('text-sm');
         skills.textContent = 'Skills: ';
-        
-        this.job._skills.forEach(skill => {
-            const skillElement = document.createElement('span');
-            skillElement.classList.add('skill');
-            skillElement.textContent = skill;
-            skills.appendChild(skillElement);
-        });
-        curJobDiv.appendChild(skills);
+        console.log(this.job)
+        // this.job._skills.forEach(skill => {
+        //     const skillElement = document.createElement('span');
+        //     skillElement.classList.add('skill');
+        //     skillElement.textContent = skill;
+        //     skills.appendChild(skillElement);
+        // });  
+        console.log(this.job.skills)
+
+        curJobDiv.appendChild(this.job.skills);
 
         const hours = document.createElement('p');
         hours.classList.add('text-base');

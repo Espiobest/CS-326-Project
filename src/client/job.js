@@ -1,14 +1,14 @@
 export class Job {
-    constructor(id, title, brief, pay, skills, hours, name, location, description) {
+    constructor(id, title, brief, pay, skills, hours, location, description, workStudy) {
       this._id = id;
       this._title = title;
       this._brief = brief;
       this._pay = pay;
       this._skills = skills;
       this._hours = hours;
-      this._name = name;
       this._location = location;
       this._description = description;
+      this._workStudy = workStudy;
     }
   
     // Getter and setter for id
@@ -59,14 +59,6 @@ export class Job {
       this._hours = value;
     }
   
-    // Getter and setter for name
-    get name() {
-      return this._name;
-    }
-    set name(value) {
-      this._name = value;
-    }
-  
     // Getter and setter for location
     get location() {
       return this._location;
@@ -82,44 +74,104 @@ export class Job {
     set description(value) {
       this._description = value;
     }
+
+    // Getter and setter for workStudy
+    get workStudy() {
+      return this._workStudy;
+    }
+    set workStudy(value) {
+      this._workStudy = value;
+    }
+}
+
+let count = 0;
+
+const genID = () => {
+  return ++count;
+}
+
+const getDescription = () => {
+  return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 }
 
 // job spoof function
 export function jobSpoof() {
-  let jobs = [];
-  for (let i = 0; i < 20; i++) {
-    jobs.push(new Job(
-      i,
-      fakeText(5, 10),
-      fakeText(10, 20),
-      Math.floor(Math.random() * 20) + 10,
-      fakeArray(5, () => fakeText(5, 10)),
-      Math.floor(Math.random() * 40) + 10,
-      fakeText(5, 10),
-      fakeText(5, 10),
-      fakeText(10000, 20000)
-    ));
-  }
+  const jobs = [
+    {
+      id: genID(),
+      postingDate: new Date(2024, 4, 15),
+      title: "Software Engineer Intern",
+      skills: ["JavaScript", "React", "Node.js", "Express", "MongoDB"],
+      location: "Manning College", 
+      workStudy: true,
+      hiringPeriod: ["Spring", "Fall", "Summer"],
+      description: getDescription(),
+      pay: 30,
+      hours: 32
+    },
+    {
+      id: genID(),
+      postingDate: new Date(2024, 3, 27),
+      title: "Marketing Associate",
+      skills: ["Marketing", "Social Media", "SEO", "Google Analytics"],
+      location: "Isenberg",
+      workStudy: false,
+      hiringPeriod: ["Summer"],
+      description: getDescription(),
+      pay: 20,
+      hours: 20
+    },
+    {
+      id: genID(),
+      postingDate: new Date(2024, 5, 2),
+      title: "Research Assistant",
+      skills: ["Research", "Data Analysis", "Excel", "Python"],
+      location: "Physical Sciences Building",
+      workStudy: true,
+      hiringPeriod: ["Fall"],
+      description: getDescription(),
+      pay: 15,
+      hours: 15
+    },
+    {
+      id: genID(),
+      postingDate: new Date(2024, 4, 9),
+      title: "Graphic Design Intern",
+      skills: ["Adobe Creative Suite", "Illustrator", "Photoshop", "InDesign"],
+      location: "Fine Arts Center",
+      workStudy: false,
+      hiringPeriod: ["Spring"],
+      description: getDescription(),
+      pay: 25,
+      hours: 25,
+    },
+    {
+      id: genID(),
+      postingDate: new Date(2024, 4, 22),
+      title: "Office Assistant", 
+      skills: ["Microsoft Office", "Customer Service", "Organization"],
+      location: "Whitmore",
+      workStudy: true,
+      hiringPeriod: ["Fall", "Spring"],
+      description: getDescription(),
+      pay: 18,
+      hours: 20
+    },
+    {
+      id: genID(),
+      postingDate: new Date(2024, 4, 31),
+      title: "Data Analyst Intern",
+      skills: ["SQL", "Python", "Data Analysis", "Excel"],
+      location: "Isenberg School of Management",
+      workStudy: true,
+      hiringPeriod: ["Spring"],
+      description: getDescription(),
+      pay: 30,
+      hours: 30
+    }
+  ];
+  
   return jobs;
-
-  function fakeText(min, max) {
-    const length = Math.floor(Math.random() * (max - min + 1)) + min;
-    let text = '';
-    const characters = 'abcdefghijklmnopqrstuvwxyz ';
-    for (let i = 0; i < length; i++) {
-      text += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return text;
-  }
-
-  function fakeArray(length, itemGen) {
-    const array = [];
-    for (let i = 0; i < length; i++) {
-      array.push(itemGen());
-    }
-    return array;
-  }
-
 }
 
 
