@@ -1,4 +1,4 @@
-class User {
+export class User {
     constructor(id, name, major, gpa, address, graduation, phone, email, citizenship) {
       this._id = id;
       this._name = name;
@@ -152,4 +152,3 @@ class User {
     }
 }
   
-module.exports = User;
