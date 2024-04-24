@@ -12,20 +12,21 @@ export class CurrentJob {
 
         const h1 = document.createElement('h1');
         h1.classList.add('text-3xl');
-        h1.textContent = this.job._title;
+        h1.textContent = this.job.title;
         curJobDiv.appendChild(h1);
 
         const h2 = document.createElement('h2');
         h2.classList.add('text-base');
-        h2.textContent = this.job._smallDesc;
+        h2.textContent = this.job.brief;
         curJobDiv.appendChild(h2);
 
         const skills = document.createElement('p');
         skills.classList.add('text-sm');
         skills.textContent = 'Skills: ';
-        this.job._skills.forEach(skill => {
+        this.job.skills.forEach(skill => {
             const skillElement = document.createElement('span');
-            skillElement.classList.add('skill');
+            skillElement.classList.add('skill', 'rounded-lg', 'text-white', 'px-2', 'm-1');
+            skillElement.style.backgroundColor = '#ba1b1d';
             skillElement.textContent = skill;
             skills.appendChild(skillElement);
         });
@@ -33,22 +34,21 @@ export class CurrentJob {
 
         const hours = document.createElement('p');
         hours.classList.add('text-base');
-        hours.textContent = `Hours per week: ${this.job._hours}`;
+        hours.textContent = `Hours per week: ${this.job.hours}`;
         curJobDiv.appendChild(hours);
 
         const pay = document.createElement('p');
         pay.classList.add('text-base');
-        pay.textContent = `Pay: $${this.job._pay}`;
+        pay.textContent = `Pay: $${this.job.pay}`;
         curJobDiv.appendChild(pay);
 
         const company = document.createElement('p');
         company.classList.add('text-base');
-        company.textContent = `Company: ${this.job._company}`;
         curJobDiv.appendChild(company);
 
         const location = document.createElement('p');
         location.classList.add('text-base');
-        location.textContent = `Location:  ${this.job._location} `;
+        location.textContent = `Location:  ${this.job.location} `;
         const applyBtn = document.createElement('input');
         applyBtn.type = 'button';
         applyBtn.value = 'Apply';
@@ -61,10 +61,11 @@ export class CurrentJob {
         description.classList.add('h-screen','overflow-y-scroll',  'w-full');
         const fullJob = document.createElement('p');
         fullJob.textContent = `Full Job description: \n`;
-        fullJob.appendChild(document.createTextNode(this.job._description));
+        fullJob.appendChild(document.createTextNode(this.job.description));
         description.appendChild(fullJob);
         curJobDiv.appendChild(description);
-        
+        // const listDiv = document.getElementById(`job-${this.job.id}`);
+        // listDiv.style.backgroundColor = '#f3f4f6';
 
         return curJobDiv;
     }

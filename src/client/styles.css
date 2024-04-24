@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 /* HTML: <div class="loader"></div> */
+html, body {margin: 0; height: 100%; overflow: hidden}
+
+.heading {
+  background-color: #ba1b1d;
+}
+
 .loader {
     width: 80px;
     height: 40px;

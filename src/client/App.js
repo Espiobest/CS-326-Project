@@ -41,7 +41,8 @@ export class App {
     let curJobElm = await new CurrentJob(this.jobs[0]).render();
     this.#jobBoardViewElm = document.createElement("div");
     this.#jobBoardViewElm.classList.add('flex');
-    this.#jobBoardViewElm.appendChild(jobListElm);this.#jobBoardViewElm.appendChild(curJobElm);
+    this.#jobBoardViewElm.appendChild(jobListElm);
+    this.#jobBoardViewElm.appendChild(curJobElm);
     
     this.#navigateTo('jobBoard');
 
@@ -50,11 +51,9 @@ export class App {
       this.#jobBoardViewElm.removeChild(curJobElm);
       curJobElm = await new CurrentJob(job).render();
       this.#jobBoardViewElm.appendChild(curJobElm);
-
     });
     this.#events.subscribe('applied to job', async job => {
       this.jobs = this.jobs.filter(jobListing => {
-        console.log(!(JSON.stringify(job) === JSON.stringify(jobListing)));
         return !(JSON.stringify(job) === JSON.stringify(jobListing))
       });
       Store.store().set("jobs", this.jobs);
