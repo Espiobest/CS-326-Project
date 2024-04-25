@@ -47,7 +47,6 @@ export class App {
     this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'h-screen', 'overflow-y-auto', 'rounded', 'w-full');
     this.#profileViewElm.innerHTML = new Profile().render();
 
-    console.log(this.#profileViewElm);
     rootElm.appendChild(navbarElm);
     
     const searchElm = document.createElement('div');

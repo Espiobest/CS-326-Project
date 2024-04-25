@@ -20,9 +20,9 @@ export class NavBar {
                                 </h1>
                             </div>
                             <button id="reset-state">Clear Slate</button>
-                            <a href="#jobBoard" class="'text-lg font-bold text-burgundy'">Jobs</a>
+                            <a href="#jobBoard" class="text-lg font-bold hover:underline">Jobs</a>
                             <span class="mx-3 text-gray-500">|</span>
-                            <a href="applications" class="'text-lg font-bold text-burgundy'">Applications</a>
+                            <a href="applications" class="text-lg font-bold hover:underline">Applications</a>
                         </div>
                     </div>
                 </div>
