@@ -23,7 +23,7 @@ export class CurrentJob {
         const skills = document.createElement('p');
         skills.classList.add('text-sm');
         skills.textContent = 'Skills: ';
-        this.job.skills.forEach(skill => {
+        this.job._skills.forEach(skill => {
             const skillElement = document.createElement('span');
             skillElement.classList.add('skill', 'rounded-lg', 'text-white', 'px-2', 'm-1');
             skillElement.style.backgroundColor = '#ba1b1d';

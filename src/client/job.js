@@ -1,5 +1,5 @@
 export class Job {
-    constructor(id, title, brief, pay, skills, hours, location, description, workStudy) {
+    constructor(id, title, brief, pay, skills, hours, location, description, workStudy, hiringPeriod) {
       this._id = id;
       this._title = title;
       this._brief = brief;
@@ -97,85 +97,80 @@ const getDescription = () => {
 // job spoof function
 export function jobSpoof() {
   const jobs = [
-    {
-      id: genID(),
-      postingDate: new Date(2024, 4, 15),
-      title: "Software Engineer Intern",
-      skills: ["JavaScript", "React", "Node.js", "Express", "MongoDB"],
-      brief: "Work on the front-end and back-end of a web application",
-      location: "Manning College", 
-      workStudy: true,
-      hiringPeriod: ["Spring", "Fall", "Summer"],
-      description: getDescription(),
-      pay: 30,
-      hours: 32
-    },
-    {
-      id: genID(),
-      postingDate: new Date(2024, 3, 27),
-      title: "Marketing Associate",
-      skills: ["Marketing", "Social Media", "SEO", "Google Analytics"],
-      brief: "Assist in the development and implementation of marketing strategies",
-      location: "Isenberg",
-      workStudy: false,
-      hiringPeriod: ["Summer"],
-      description: getDescription(),
-      pay: 20,
-      hours: 20
-    },
-    {
-      id: genID(),
-      postingDate: new Date(2024, 5, 2),
-      title: "Research Assistant",
-      skills: ["Research", "Data Analysis", "Excel", "Python"],
-      brief: "Assist in the development of research projects",
-      location: "Physical Sciences Building",
-      workStudy: true,
-      hiringPeriod: ["Fall"],
-      description: getDescription(),
-      pay: 15,
-      hours: 15
-    },
-    {
-      id: genID(),
-      postingDate: new Date(2024, 4, 9),
-      title: "Graphic Design Intern",
-      skills: ["Adobe Creative Suite", "Illustrator", "Photoshop", "InDesign"],
-      brief: "Create visual content for social media and marketing campaigns",
-      location: "Fine Arts Center",
-      workStudy: false,
-      hiringPeriod: ["Spring"],
-      description: getDescription(),
-      pay: 25,
-      hours: 25,
-    },
-    {
-      id: genID(),
-      postingDate: new Date(2024, 4, 22),
-      title: "Office Assistant", 
-      skills: ["Microsoft Office", "Customer Service", "Organization"],
-      brief: "Assist in the daily operations of the office",
-      location: "Whitmore",
-      workStudy: true,
-      hiringPeriod: ["Fall", "Spring"],
-      description: getDescription(),
-      pay: 18,
-      hours: 20
-    },
-    {
-      id: genID(),
-      postingDate: new Date(2024, 4, 31),
-      title: "Data Analyst Intern",
-      skills: ["SQL", "Python", "Data Analysis", "Excel"],
-      brief: "Analyze data and create reports for various projects",
-      location: "Isenberg School of Management",
-      workStudy: true,
-      hiringPeriod: ["Spring"],
-      description: getDescription(),
-      pay: 30,
-      hours: 30
-    }
+    new Job(
+      genID(),
+      "Software Engineer Intern",
+      "Work on the front-end and back-end of a web application",
+      30,
+      ["JavaScript", "React", "Node.js", "Express", "MongoDB"],
+      32,
+      "Manning College",
+      getDescription(),
+      true,
+      ["Spring", "Fall", "Summer"]
+    ),
+    new Job(
+      genID(),
+      "Marketing Associate",
+      "Assist in the development and implementation of marketing strategies",
+      20,
+      ["Marketing", "Social Media", "SEO", "Google Analytics"],
+      20,
+      "Isenberg",
+      getDescription(),
+      false,
+      ["Summer"]
+    ),
+    new Job(
+      genID(),
+      "Research Assistant",
+      "Assist in the development of research projects",
+      15,
+      ["Research", "Data Analysis", "Excel", "Python"],
+      15,
+      "Physical Sciences Building",
+      getDescription(),
+      true,
+      ["Fall"]
+    ),
+    new Job(
+      genID(),
+      "Graphic Design Intern",
+      "Create visual content for social media and marketing campaigns",
+      25,
+      ["Adobe Creative Suite", "Illustrator", "Photoshop", "InDesign"],
+      25,
+      "Fine Arts Center",
+      getDescription(),
+      false,
+      ["Spring"]
+    ),
+    new Job(
+      genID(),
+      "Office Assistant",
+      "Assist in the daily operations of the office",
+      18,
+      ["Microsoft Office", "Customer Service", "Organization"],
+      20,
+      "Whitmore",
+      getDescription(),
+      true,
+      ["Fall", "Spring"]
+    ),
+    new Job(
+      genID(),
+      "Data Analyst Intern",
+      "Analyze data and create reports for various projects",
+      30,
+      ["SQL", "Python", "Data Analysis", "Excel"],
+      30,
+      "Isenberg School of Management",
+      getDescription(),
+      true,
+      ["Spring"]
+    )
   ];
+
   
   return jobs;
 }

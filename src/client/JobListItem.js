@@ -10,18 +10,18 @@ export class JobListItem {
 
         const h1 = document.createElement('h1');
         h1.classList.add('text-3xl');
-        h1.textContent = this.job.title;
+        h1.textContent = this.job._title;
         curJobDiv.appendChild(h1);
 
         const h2 = document.createElement('h2');
         h2.classList.add('text-base');
-        h2.textContent = this.job.brief;
+        h2.textContent = this.job._brief;
         curJobDiv.appendChild(h2);
 
         const skills = document.createElement('p');
         skills.classList.add('text-sm');
         skills.textContent = 'Skills: ';
-        this.job.skills.forEach(skill => {
+        this.job._skills.forEach(skill => {
             const skillElement = document.createElement('span');
             skillElement.classList.add('skill', 'rounded-lg', 'text-white', 'px-2', 'm-1');
             skillElement.style.backgroundColor = '#ba1b1d';
@@ -33,17 +33,17 @@ export class JobListItem {
 
         const hours = document.createElement('p');
         hours.classList.add('text-base');
-        hours.textContent = `Hours per week: ${this.job.hours}`;
+        hours.textContent = `Hours per week: ${this.job._hours}`;
         curJobDiv.appendChild(hours);
 
         const pay = document.createElement('p');
         pay.classList.add('text-base');
-        pay.textContent = `Pay: $${this.job.pay}`;
+        pay.textContent = `Pay: $${this.job._pay}`;
         curJobDiv.appendChild(pay);
 
         const location = document.createElement('p');
         location.classList.add('text-base');
-        location.textContent = `Location:  ${this.job.location} `;
+        location.textContent = `Location:  ${this.job._location} `;
         curJobDiv.appendChild(location);
 
         curJobDiv.addEventListener('click', () => {            

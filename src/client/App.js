@@ -1,6 +1,7 @@
 import { jobSpoof } from './job.js';
 
 import { NavBar } from './NavBar.js';
+import { Profile } from './Profile.js';
 import * as db from "./db.js";
 import { User } from './user.js';
 
@@ -38,20 +39,20 @@ export class App {
     navbarElm.appendChild(await navbar.render());
 
     
-
-
     this.#mainViewElm = document.createElement('div');
     this.#mainViewElm.id = 'main-view';
     this.#mainViewElm.maxHeight = '100vh';
-    // this.#mainViewElm.classList.add('bg-slate-100', 'h-screen', 'overflow-y-auto')
 
+    this.#profileViewElm = document.createElement('div');
+    this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'h-screen', 'overflow-y-auto', 'rounded', 'w-full');
+    this.#profileViewElm.innerHTML = new Profile().render();
+
+    console.log(this.#profileViewElm);
     rootElm.appendChild(navbarElm);
     
     const searchElm = document.createElement('div');
     //make searchElm display elements in a row
     searchElm.style.display = 'flex';
-
-    
     
 
     const searchInputElm = document.createElement('input');
@@ -91,7 +92,7 @@ export class App {
     
     searchInputElm.addEventListener('input', async e => {
       const filter = e.target.value;
-      jobListElm = await new jobList(this.jobs.filter(job => job.title.toLowerCase().includes(filter) )).render();
+      jobListElm = await new jobList(this.jobs.filter(job => job.title.toLowerCase().includes(filter) || job.brief.toLowerCase().includes(filter))).render();
       this.#jobBoardViewElm.innerHTML = '';
       this.#jobBoardViewElm.appendChild(jobListElm);
       this.#jobBoardViewElm.appendChild(curJobElm);
@@ -138,7 +139,16 @@ export class App {
       this.#mainViewElm.appendChild(this.#applicationsViewElm);
     } 
     else if (view === 'profile') {
-
+      this.#mainViewElm.appendChild(this.#profileViewElm);
+      document.getElementById('ps').value = this.user._personalStatement || "Enter a personal statement here";
+      document.getElementById('submit').addEventListener('click', async e => {
+        this.user._personalStatement = document.getElementById('ps').value;
+        await db.modifyUser(this.user);
+        alert('Personal statement saved');
+      });
+      document.getElementById('resume').addEventListener('click', e => {
+        alert('Not implemented yet');
+      });
     }
     else {
       

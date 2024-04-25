@@ -13,7 +13,12 @@ export class NavBar {
                     <div class="mx-auto max-w-screen-sm flex flex-wrap justify-between px-4">
                         <img class = "rounded-full w-32 h-32" src = "assets/logo.png" alt ="JobsForUMass logo">
                         <div class="mx-auto px-4 py-8">
-                            <h1 class="text-4xl font-mono font-bold text-black mb-8">JobsForUMass</h1>
+                            <div class="flex justify-between">
+                                <h1 class="text-4xl font-mono font-bold text-black mb-8">JobsForUMass
+                                <a class="fa-solid fa-user-circle fa-2x" style="margin-left:auto" href="profile" id="profile">
+                                </a>
+                                </h1>
+                            </div>
                             <button id="reset-state">Clear Slate</button>
                             <a href="#jobBoard" class="'text-lg font-bold text-burgundy'">Jobs</a>
                             <span class="mx-3 text-gray-500">|</span>
