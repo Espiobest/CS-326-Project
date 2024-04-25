@@ -1,5 +1,6 @@
 import { Events } from './Events.js';
 import { JobListItem } from './JobListItem.js';
+
 export class jobList {
     #events = null;
     jobs = null;

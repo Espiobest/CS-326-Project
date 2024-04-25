@@ -1,6 +1,6 @@
-export class Profile{
-    constructor(view){
-        this.view = view;
+export class Profile {
+    constructor(view) {
+      this.view = view;
     }
 
     render(){
@@ -34,4 +34,4 @@ export class Profile{
         `;
         return rootElm;
     }
-}
+  }

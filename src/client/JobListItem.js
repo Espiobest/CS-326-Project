@@ -1,8 +1,8 @@
 export class JobListItem {
     constructor(job) {
-        this.job = job;
+      this.job = job;
     }
-
+  
     async render() {
         const curJobDiv = document.createElement('div');
         curJobDiv.classList.add('bg-slate-200', 'rounded-lg', 'p-5', 'mb-5');
