@@ -6,7 +6,7 @@
 html, body {margin: 0; height:100%; overflow: hidden}
 
 #main-view{
-  overflow-y: scroll;
+  overflow-y: scroll !important;
 }
 
 .heading {

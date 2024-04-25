@@ -21,7 +21,6 @@ export class NavBar {
                 <a class="fa-solid fa-user-circle fa-2x" style="margin-left:auto" href="profile" id="profile"> </a>
               </h1>
             </div>
-            <button id="reset-state">Clear Slate</button>
             <a href="#jobBoard" class="text-lg font-bold hover:underline">Jobs</a>
             <span class="mx-3 text-gray-500">|</span>
             <a href="applications" class="text-lg font-bold hover:underline">Applications</a>

@@ -75,7 +75,13 @@ export class App {
     const preferences = document.createElement('div');
     preferences.innerHTML = 
     `<div class="mb-5 rounded-lg bg-slate-200 p-5">
-    Pay: $<input type="text" id="pay"> or greater Skills: <input type="text" id="skill-input"> <ul id="skill-list"></ul> Work study? <input type="checkbox" name="" id="work-study">Hiring Period <select name="" id="hiring-period">
+    Pay: $<input type="text" id="pay"> or greater Skills: <input type="text" id="skill-input"> <ul id="skill-list"></ul>
+    Work study? <select name="" id="work-study">
+    <option value="Any">Any</option>
+    <option value=true>Yes</option>
+    <option value=false>No</option>
+  </select>
+    Hiring Period <select name="" id="hiring-period">
       <option value="Any">Any</option>
       <option value="Fall">Fall</option>
       <option value="Spring">Spring</option>
@@ -83,13 +89,24 @@ export class App {
     </select>
   </div>`;
     preferences.style.display = 'none';
+    const idMap = {}
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && document.getElementById('skill-input').value !== '') {
         const skillInput = document.getElementById('skill-input');
         const skill = skillInput.value;
         skillInput.value = '';
-        document.getElementById('skill-list').innerHTML += `<li>${skill}<img src="./assets/x-solid.svg" height="10px" width="10px"></li>`
-
+        let li = document.createElement('li');
+        li.innerText = skill;
+        let img = document.createElement('img');
+        img.src = './assets/x-solid.svg';
+        img.width = img.height = 10;
+        img.classList.add('cross');
+        img.addEventListener('click', e => {
+          e.target.parentElement.remove();
+        });
+        li.appendChild(img);
+        document.getElementById('skill-list').appendChild(li);
+        idMap[li] = skill;
       }
     })
     preferencesButton.addEventListener('click', async e => {
@@ -116,7 +133,7 @@ export class App {
     
     searchInputElm.addEventListener('input', async e => {
       const filter = e.target.value;
-      jobListElm = await new jobList(this.jobs.filter(job => job.title.toLowerCase().includes(filter) || job.brief.toLowerCase().includes(filter))).render();
+      jobListElm = await new jobList(this.jobs.filter(job => job._title.toLowerCase().includes(filter) || job._brief.toLowerCase().includes(filter))).render();
       this.#jobBoardViewElm.innerHTML = '';
       this.#jobBoardViewElm.appendChild(jobListElm);
       this.#jobBoardViewElm.appendChild(curJobElm);
@@ -142,7 +159,7 @@ export class App {
       const skill = li.innerText;
       skills.push(skill.toLowerCase());
     }
-    const workStudy = workStudyCheckbox.checked;
+    const workStudy = workStudyCheckbox.value;
     const hiringPeriod = hiringPeriodSelect.value;
     const filteredJobs = this.jobs.filter(job => {
       // Apply the filters
@@ -152,7 +169,7 @@ export class App {
       if (skills.length > 0 && !skills.some(skill => job.skills.map(j => j.toLowerCase()).includes(skill))) {
         return false;
       }
-      if (!workStudy) {
+      if (workStudy !== "Any" && workStudy  != job._workStudy.toString()) {
         return false;
       }
       if (hiringPeriod !== 'Any' && !job.hiringPeriod.includes(hiringPeriod)) {
