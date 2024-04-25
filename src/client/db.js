@@ -99,8 +99,19 @@ export async function modifyUser(user) {
  * is a database issue.
  */
 export async function getUser() {
-  const user = await db.get("user");
-  return user.user;
+  try{
+    const user = await db.get("user");
+    return user.user;
+  }
+  catch(err){
+    console.log("User not found, creating new user");
+    const user = new User();
+    db.put({
+      _id: 'user',
+      user: new User(),
+    });
+    return user;
+  }
 }
 
 /**
