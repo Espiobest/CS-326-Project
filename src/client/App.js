@@ -209,6 +209,11 @@ export class App {
       this.#jobBoardViewElm.appendChild(curJobElm);
     });
     this.#events.subscribe('applied to job', async job => {
+      if (this.jobs.length === 0){
+        this.jobs = jobSpoof();
+        await this.db.modifyJob(this.jobs);
+      }
+
       this.jobs = this.jobs.filter(jobListing => {
         return !(JSON.stringify(job) === JSON.stringify(jobListing))
       });
@@ -242,16 +247,14 @@ export class App {
     this.#events.subscribe('reset', async () => {
       await this.db.clearDB();
       this.jobs = jobSpoof();
-      await this.db.modifyJob(this.jobs);
-      this.user = await this.db.getUser();
-
+      this.#navigateTo('jobBoard');
       window.location.reload(true);
     });
   }
 
   async #navigateTo(view) {
-    this.jobs = await db.loadJobs();
-    this.user = await db.getUser();
+    this.jobs = await this.db.loadJobs();
+    this.user = await this.db.getUser();
 
     this.#mainViewElm.innerHTML = '';
     if (view === 'jobBoard') {
