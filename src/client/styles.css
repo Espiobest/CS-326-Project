@@ -45,3 +45,11 @@ html, body {margin: 0; height:100%; overflow: hidden}
 #profile:hover{
   color: white;
 }
+
+.active {
+  background-color: white;
+}
+
+.fa-brands:hover{
+  color: lightblue;
+}

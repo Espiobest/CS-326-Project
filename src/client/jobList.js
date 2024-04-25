@@ -11,11 +11,15 @@ export class jobList {
     async render() {
         const rootElm = document.createElement('div');
         rootElm.classList.add('w-1/2',  'bg-white', 'h-screen', 'overflow-y-auto', 'rounded');
-
+        let i = 0;
         for (const index in this.jobs) {
             const job = this.jobs[index];
             const item = new JobListItem(job);
             const elm = await item.render();
+            if (i == 0){
+                elm.style.backgroundColor = 'lightgray';
+            }
+            i++;
             elm.addEventListener("click", () => {
                 this.#events.publish('job clicked', job);
             });

@@ -105,8 +105,11 @@ export class App {
 
     this.#events.subscribe('navigateTo', view => {this.#navigateTo(view); navbar.view = view});
     this.#events.subscribe('job clicked', async job => {
+      document.getElementById(curJobElm.id).style.backgroundColor = '#E2E8F0';
       this.#jobBoardViewElm.removeChild(curJobElm);
       curJobElm = await new CurrentJob(job).render();
+      curJobElm.id = `job-${job.id}`;
+      document.getElementById(`job-${job.id}`).style.backgroundColor = 'lightgray';
       this.#jobBoardViewElm.appendChild(curJobElm);
     });
     this.#events.subscribe('applied to job', async job => {

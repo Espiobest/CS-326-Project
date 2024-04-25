@@ -45,9 +45,6 @@ export class JobListItem {
         location.classList.add('text-base');
         location.textContent = `Location:  ${this.job._location} `;
         curJobDiv.appendChild(location);
-
-        curJobDiv.addEventListener('click', () => {            
-        })
         return curJobDiv;
     }
 }
