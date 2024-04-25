@@ -12,12 +12,12 @@ export class CurrentJob {
 
         const h1 = document.createElement('h1');
         h1.classList.add('text-3xl');
-        h1.textContent = this.job.title;
+        h1.textContent = this.job._title;
         curJobDiv.appendChild(h1);
 
         const h2 = document.createElement('h2');
         h2.classList.add('text-base');
-        h2.textContent = this.job.brief;
+        h2.textContent = this.job._brief;
         curJobDiv.appendChild(h2);
 
         const skills = document.createElement('p');
@@ -34,12 +34,12 @@ export class CurrentJob {
 
         const hours = document.createElement('p');
         hours.classList.add('text-base');
-        hours.textContent = `Hours per week: ${this.job.hours}`;
+        hours.textContent = `Hours per week: ${this.job._hours}`;
         curJobDiv.appendChild(hours);
 
         const pay = document.createElement('p');
         pay.classList.add('text-base');
-        pay.textContent = `Pay: $${this.job.pay}`;
+        pay.textContent = `Pay: $${this.job._pay}`;
         curJobDiv.appendChild(pay);
 
         const company = document.createElement('p');
@@ -48,7 +48,7 @@ export class CurrentJob {
 
         const location = document.createElement('p');
         location.classList.add('text-base');
-        location.textContent = `Location:  ${this.job.location} `;
+        location.textContent = `Location:  ${this.job._location} `;
         const applyBtn = document.createElement('input');
         applyBtn.type = 'button';
         applyBtn.value = 'Apply';
@@ -61,7 +61,7 @@ export class CurrentJob {
         description.classList.add('h-screen','overflow-y-scroll',  'w-full');
         const fullJob = document.createElement('p');
         fullJob.textContent = `Full Job description: \n`;
-        fullJob.appendChild(document.createTextNode(this.job.description));
+        fullJob.appendChild(document.createTextNode(this.job._description));
         description.appendChild(fullJob);
         curJobDiv.appendChild(description);
         // const listDiv = document.getElementById(`job-${this.job.id}`);
