@@ -25,10 +25,11 @@ export class App {
   }
 
   async render(root) {
-    this.user = await db.getUser();
-    this.jobs = await db.loadJobs();
+    this.user = await this.db.getUser();
+    this.jobs = await this.db.loadJobs();
     if (this.jobs.length === 0){
       this.jobs = jobSpoof();
+      await this.db.modifyJob(this.jobs)
     }
     const rootElm = document.getElementById(root);
     rootElm.innerHTML = '';
@@ -41,7 +42,6 @@ export class App {
     
     this.#mainViewElm = document.createElement('div');
     this.#mainViewElm.id = 'main-view';
-    this.#mainViewElm.maxHeight = '100vh';
 
     this.#profileViewElm = document.createElement('div');
     this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'overflow-y-auto', 'rounded', 'w-full');
@@ -166,13 +166,13 @@ export class App {
       if (pay && job.pay <= parseFloat(pay)) {
         return false;
       }
-      if (skills.length > 0 && !skills.some(skill => job.skills.map(j => j.toLowerCase()).includes(skill))) {
+      if (skills.length > 0 && !skills.some(skill => job._skills.map(j => j.toLowerCase()).includes(skill))) {
         return false;
       }
       if (workStudy !== "Any" && workStudy  != job._workStudy.toString()) {
         return false;
       }
-      if (hiringPeriod !== 'Any' && !job.hiringPeriod.includes(hiringPeriod)) {
+      if (hiringPeriod !== 'Any' && !job._hiringPeriod.includes(hiringPeriod)) {
         return false;
       }
       return true;
@@ -189,8 +189,8 @@ export class App {
     this.#jobBoardViewElm.appendChild(curJobElm);
 
   });
-    
-    this.#applicationsViewElm = await new jobList(this.user._jobsApplied).render();
+    this.#applicationsViewElm = await new jobList(this.user._jobsApplied, 'application').render();
+    this.#applicationsViewElm.classList.add('overflow-y-auto');
     
     this.#navigateTo('jobBoard');
 
@@ -212,12 +212,25 @@ export class App {
       this.jobs = this.jobs.filter(jobListing => {
         return !(JSON.stringify(job) === JSON.stringify(jobListing))
       });
-      await db.modifyJob(this.jobs);
+
+      if (this.jobs.length === 0){
+        this.#jobBoardViewElm.removeChild(curJobElm);
+        this.#jobBoardViewElm.removeChild(jobListElm);
+        curJobElm = await new CurrentJob(null).render();
+        this.#jobBoardViewElm = document.createElement("div");
+        this.#jobBoardViewElm.classList.add('flex');
+        this.#jobBoardViewElm.appendChild(curJobElm);
+        this.#jobBoardViewElm.appendChild(curJobElm);
+        this.#mainViewElm.appendChild(this.#jobBoardViewElm);
+        return;
+      }
+
+      await this.db.modifyJob(this.jobs);
       this.user._jobsApplied.push(job);
-      await db.modifyUser(this.user);
+      await this.db.modifyUser(this.user);
       this.#jobBoardViewElm.removeChild(curJobElm);
       this.#jobBoardViewElm.removeChild(jobListElm);
-      this.#applicationsViewElm = await new jobList(this.user._jobsApplied).render();
+      this.#applicationsViewElm = await new jobList(this.user._jobsApplied, 'application').render();
 
       curJobElm = await new CurrentJob(this.jobs[0]).render();
       jobListElm = await new jobList(this.jobs).render();
@@ -225,9 +238,21 @@ export class App {
       this.#jobBoardViewElm.appendChild(jobListElm);
       this.#jobBoardViewElm.appendChild(curJobElm);
     })
+
+    this.#events.subscribe('reset', async () => {
+      await this.db.clearDB();
+      this.jobs = jobSpoof();
+      await this.db.modifyJob(this.jobs);
+      this.user = await this.db.getUser();
+
+      window.location.reload(true);
+    });
   }
 
-  #navigateTo(view) {
+  async #navigateTo(view) {
+    this.jobs = await db.loadJobs();
+    this.user = await db.getUser();
+
     this.#mainViewElm.innerHTML = '';
     if (view === 'jobBoard') {
       this.#mainViewElm.appendChild(this.#jobBoardViewElm);
@@ -238,6 +263,16 @@ export class App {
       
     } else if (view === 'applications') {
       // TODO: this is where we want to add the archive view
+      // add a reset button to call reset and initDB
+      if (this.#applicationsViewElm.firstChild && this.#applicationsViewElm.firstChild.id !== "reset"){
+        const resetButton = document.createElement('button');
+        resetButton.id = "reset"
+        resetButton.textContent = 'Reset';
+        resetButton.addEventListener('click', async () => {
+          await this.#events.publish('reset');
+        });
+        this.#applicationsViewElm.insertBefore(resetButton, this.#applicationsViewElm.firstChild);
+      }
       this.#mainViewElm.appendChild(this.#applicationsViewElm);
       let searchElm = document.getElementById('search-bar');
       if (searchElm){
@@ -255,7 +290,7 @@ export class App {
       document.getElementById('ps').value = this.user._personalStatement || "Enter a personal statement here";
       document.getElementById('submit').addEventListener('click', async e => {
         this.user._personalStatement = document.getElementById('ps').value;
-        await db.modifyUser(this.user);
+        await this.db.modifyUser(this.user);
         alert('Personal statement saved');
       });
       document.getElementById('resume').addEventListener('click', e => {

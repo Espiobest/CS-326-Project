@@ -9,7 +9,7 @@ export class jobList {
         this.jobs = jobs;
     }
     
-    async render() {
+    async render(view = 'jobList') {
         const rootElm = document.createElement('div');
         rootElm.classList.add('w-1/2',  'bg-white', 'h-screen', 'overflow-y-auto', 'rounded');
         let i = 0;
@@ -28,7 +28,6 @@ export class jobList {
             });
             rootElm.appendChild(elm);
         }
-        //this.#events.subscribe('applied to job', job)
         return rootElm;
     }
 }

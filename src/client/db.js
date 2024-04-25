@@ -39,14 +39,14 @@
  * modifications.
  */
 import { User } from "./user.js";
-const db = new PouchDB("JobsDB");
+var database = new PouchDB("JobsDB");
 
 export async function initDB(){
   // add empty jobList and user data if database is empty
-  db.info().then(async function (result) {
+  database.info().then(async function (result) {
     if(result.doc_count === 0) {
-      await db.put({ _id: 'job', jobs: [] });
-      await db.put({ _id: 'user', user: new User()});
+      await database.put({ _id: 'job', jobs: [] });
+      await database.put({ _id: 'user', user: new User()});
     }
   });
 }
@@ -60,15 +60,15 @@ export async function initDB(){
  * does not exist or database issues.
  */
 export async function modifyJob(jobList) {
-  db.get('job').then(function(doc) {
-    return db.put({
+  database.get('job').then(function(doc) {
+    return database.put({
       _id: 'job',
       _rev: doc._rev,
       jobs: jobList
     });
   }).catch(err => {
     throw new Error(`Failed to modify job: ${err.message}`);
-  });
+  })
 }
 
 /**
@@ -79,8 +79,8 @@ export async function modifyJob(jobList) {
   * is a database issue.
 */
 export async function modifyUser(user) {
-  db.get('user').then(function(doc) {
-    return db.put({
+  database.get('user').then(function(doc) {
+    database.put({
       _id: 'user',
       _rev: doc._rev,
       user: user
@@ -99,14 +99,14 @@ export async function modifyUser(user) {
  * is a database issue.
  */
 export async function getUser() {
+
   try{
-    const user = await db.get("user");
+    const user = await database.get("user");
     return user.user;
   }
   catch(err){
-    console.log("User not found, creating new user");
     const user = new User();
-    db.put({
+    database.put({
       _id: 'user',
       user: new User(),
     });
@@ -123,8 +123,8 @@ export async function getUser() {
  * is a database issue.
  */
 export async function getUserAppliedJobs() {
-  const user = await db.get("user");
-  return user.user.jobsApplied;
+  const user = await database.get("user");
+  return user.user._jobsApplied;
 }
 
 
@@ -137,7 +137,7 @@ export async function getUserAppliedJobs() {
  * is a database issue.
  */
 export async function loadJobs() {
-  const jobs = await db.get("job");
+  const jobs = await database.get("job");
   return jobs.jobs;
 }
 
@@ -148,24 +148,6 @@ export async function loadJobs() {
  * @throws {Error} - Throws an error if the operation fails
  */
 export async function clearDB(){
-
-  db.get('user').then(function(doc) {
-    db.put({
-      _id: 'user',
-      _rev: doc._rev,
-      user: new User()
-    });
-  }).catch(err => {
-    throw new Error(`Failed to modify job: ${err.message}`);
-  });
-
-  db.get('job').then(function(doc) {
-    return db.put({
-      _id: 'job',
-      _rev: doc._rev,
-      jobs: []
-    });
-  }).catch(err => {
-    throw new Error(`Failed to modify job: ${err.message}`);
-  });
+  await modifyJob([]);
+  await modifyUser(new User());
 }

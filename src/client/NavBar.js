@@ -43,7 +43,6 @@ export class NavBar {
 
         // Update the window's hash to reflect the current view
         window.location.hash = view;
-
         // Call the navigateTo function with the view name
         await this.#events.publish('navigateTo', view);
       });
