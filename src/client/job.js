@@ -9,6 +9,7 @@ export class Job {
       this._location = location;
       this._description = description;
       this._workStudy = workStudy;
+      this._hiringPeriod = hiringPeriod;
     }
   
     // Getter and setter for id
@@ -81,6 +82,14 @@ export class Job {
     }
     set workStudy(value) {
       this._workStudy = value;
+    }
+
+    // Getter and setter for hiringPeriod
+    get hiringPeriod() {
+      return this._hiringPeriod;
+    }
+    set hiringPeriod(value) {
+      this._hiringPeriod = value;
     }
 }
 

@@ -15,7 +15,7 @@ export class App {
   #mainViewElm = null;
   #applicationsViewElm = null;
   #jobBoardViewElm = null;
-    #events = null;
+  #events = null;
   constructor() {
     this.db = db;
     this.db.initDB();
@@ -44,7 +44,7 @@ export class App {
     this.#mainViewElm.maxHeight = '100vh';
 
     this.#profileViewElm = document.createElement('div');
-    this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'h-screen', 'overflow-y-auto', 'rounded', 'w-full');
+    this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'overflow-y-auto', 'rounded', 'w-full');
     this.#profileViewElm.innerHTML = new Profile().render();
 
     rootElm.appendChild(navbarElm);
@@ -53,6 +53,7 @@ export class App {
     const searchElm = document.createElement('div');
     //make searchElm display elements in a row
     searchElm.style.display = 'flex';
+    searchElm.id = 'search-bar';
 
     const searchInputElm = document.createElement('input');
     searchInputElm.type = 'text';
@@ -63,7 +64,7 @@ export class App {
     
     const searchButton = document.createElement('button');
     searchButton.id = 'search';
-    searchButton.classList.add('rounded', 'bg-burgundy', 'border-2', 'hover:bg-rosewood', 'hover:border-red-950', 'hover:border-2', 'text-white', 'py-2', 'px-3', 'font-mono');
+    searchButton.classList.add('rounded', 'bg-rose-900', 'border-2', 'hover:bg-rosewood', 'hover:border-red-950', 'hover:border-2', 'text-white', 'py-2', 'px-3', 'font-mono');
     searchButton.innerText = 'Search';
     searchElm.appendChild(searchButton);
     
@@ -78,10 +79,10 @@ export class App {
       <option value="Any">Any</option>
       <option value="Fall">Fall</option>
       <option value="Spring">Spring</option>
-      <option value="Summer">Summer</option>
+      <option value="Summer">Summer</option>  
     </select>
   </div>`;
-    preferences.style.visibility = 'hidden';
+    preferences.style.display = 'none';
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && document.getElementById('skill-input').value !== '') {
         const skillInput = document.getElementById('skill-input');
@@ -92,25 +93,21 @@ export class App {
       }
     })
     preferencesButton.addEventListener('click', async e => {
-      if ( preferences.style.visibility === 'hidden'){preferences.style.visibility = 'visible';}
-      else {preferences.style.visibility = 'hidden';}
+      if ( preferences.style.display === 'none'){preferences.style.display = 'block';}
+      else {preferences.style.display = 'none';}
     });
 
   
-  // Get the values of the input fields
-  
-
-
     searchElm.appendChild(preferencesButton);
     rootElm.appendChild(searchElm);
     rootElm.appendChild(preferences);
-
     
     //append main view to root
     rootElm.appendChild(this.#mainViewElm);
 
     let jobListElm = await new jobList(this.jobs).render();
     let curJobElm = await new CurrentJob(this.jobs[0]).render();
+    curJobElm.id = `job-${this.jobs[0]._id}`;
     this.#jobBoardViewElm = document.createElement("div");
     this.#jobBoardViewElm.classList.add('flex');
     
@@ -127,14 +124,12 @@ export class App {
       
     });
     
-    
     searchButton.addEventListener('click', async () => {
     const payInput = document.getElementById('pay');
     const skillInput = document.getElementById('skill-list');
     const workStudyCheckbox = document.getElementById('work-study');
     const hiringPeriodSelect = document.getElementById('hiring-period');
     const pay = payInput.value;
-    console.log(pay);
     //check if pay is a number
     if (isNaN(pay)) {
       alert('Pay must be a number');
@@ -145,18 +140,16 @@ export class App {
     for (let i = 0; i < skillInput.children.length; i++) {
       const li = skillInput.children[i];
       const skill = li.innerText;
-      skills.push(skill);
+      skills.push(skill.toLowerCase());
     }
-    console.log(skills);
     const workStudy = workStudyCheckbox.checked;
     const hiringPeriod = hiringPeriodSelect.value;
-    console.log(this.jobs);
     const filteredJobs = this.jobs.filter(job => {
       // Apply the filters
       if (pay && job.pay <= parseFloat(pay)) {
         return false;
       }
-      if (skills.length > 0 && !skills.some(skill => job.skills.includes(skill))) {
+      if (skills.length > 0 && !skills.some(skill => job.skills.map(j => j.toLowerCase()).includes(skill))) {
         return false;
       }
       if (!workStudy) {
@@ -171,10 +164,9 @@ export class App {
       alert('No results found');
       return;
     }
-    console.log(filteredJobs);
     
     
-      jobListElm = await new jobList(filteredJobs).render();
+    jobListElm = await new jobList(filteredJobs).render();
     this.#jobBoardViewElm.innerHTML = '';
     this.#jobBoardViewElm.appendChild(jobListElm);
     this.#jobBoardViewElm.appendChild(curJobElm);
@@ -187,11 +179,16 @@ export class App {
 
     this.#events.subscribe('navigateTo', view => {this.#navigateTo(view); navbar.view = view});
     this.#events.subscribe('job clicked', async job => {
-      document.getElementById(curJobElm.id).style.backgroundColor = '#E2E8F0';
+      if (window.location.hash === '#jobBoard'){
+        let oldJobElm = document.getElementById(curJobElm.id);
+        if (oldJobElm){
+          oldJobElm.style.backgroundColor = '#E2E8F0';
+          document.getElementById(`job-${job._id}`).style.backgroundColor = 'lightgray';
+        }        
+      }
       this.#jobBoardViewElm.removeChild(curJobElm);
       curJobElm = await new CurrentJob(job).render();
-      curJobElm.id = `job-${job.id}`;
-      document.getElementById(`job-${job.id}`).style.backgroundColor = 'lightgray';
+      curJobElm.id = `job-${job._id}`;
       this.#jobBoardViewElm.appendChild(curJobElm);
     });
     this.#events.subscribe('applied to job', async job => {
@@ -217,13 +214,27 @@ export class App {
     this.#mainViewElm.innerHTML = '';
     if (view === 'jobBoard') {
       this.#mainViewElm.appendChild(this.#jobBoardViewElm);
+      let searchElm = document.getElementById('search-bar');
+      if (searchElm){
+        searchElm.style.display = 'flex';
+      }
       
     } else if (view === 'applications') {
       // TODO: this is where we want to add the archive view
       this.#mainViewElm.appendChild(this.#applicationsViewElm);
+      let searchElm = document.getElementById('search-bar');
+      if (searchElm){
+        searchElm.style.display = 'none';
+      }
     } 
     else if (view === 'profile') {
       this.#mainViewElm.appendChild(this.#profileViewElm);
+
+      let searchElm = document.getElementById('search-bar');
+      if (searchElm){
+        searchElm.style.display = 'none';
+      }
+      
       document.getElementById('ps').value = this.user._personalStatement || "Enter a personal statement here";
       document.getElementById('submit').addEventListener('click', async e => {
         this.user._personalStatement = document.getElementById('ps').value;

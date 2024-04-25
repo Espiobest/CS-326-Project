@@ -5,8 +5,8 @@ export class Profile{
 
     render(){
         const rootElm = `
-                <h1 class="text-4xl font-bold text-center">Your Profile</h1>
-            <div class="flex justify-center items-center p-4">
+            <h1 class="text-4xl font-bold text-center">Your Profile</h1>
+            <div class="flex justify-center items-center px-4">
                 <img src="assets/logo.png" class="w-20 h-20 rounded-full" alt="profile">
                 <div class="ml-4">
                     <h2 class="text-xl font-bold">John Doe</h2>
@@ -30,7 +30,7 @@ export class Profile{
             <div class="text-center border-2 border-gray-200 rounded-lg w-full" id="resume" style="height: 10%">
                 Upload Here <i class="fa fa-upload" aria-hidden="true"></i>
             </div>
-            <button id="submit" class="bg-burgundy rounded-lg text-white p-2 mt-2">Save</button>
+            <button id="submit" class="rounded-lg bg-rose-900 text-white p-2 mt-2">Save</button>
         `;
         return rootElm;
     }

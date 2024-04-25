@@ -17,7 +17,9 @@ export class jobList {
             const item = new JobListItem(job);
             const elm = await item.render();
             if (i == 0){
-                elm.style.backgroundColor = 'lightgray';
+                if (window.location.hash == '#jobBoard'){
+                    elm.style.backgroundColor = 'lightgray';
+                }
             }
             i++;
             elm.addEventListener("click", () => {

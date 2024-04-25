@@ -7,10 +7,11 @@ export class NavBar {
     }
 
     async render() {
-        const nav = document.createElement('nav'); 
+        const nav = document.createElement('nav');
+        nav.classList.add('navbar');
         nav.innerHTML = `
                 <div class="heading">
-                    <div class="mx-auto max-w-screen-sm flex flex-wrap justify-between px-4">
+                    <div class="mx-auto max-w-screen-sm flex flex-wrap justify-between p-4">
                         <img class = "rounded-full w-32 h-32" src = "./assets/logo.png" alt ="JobsForUMass logo">
                         <div class="mx-auto px-4 py-8">
                             <div class="flex justify-between">

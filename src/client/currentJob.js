@@ -8,11 +8,19 @@ export class CurrentJob {
 
     async render() {
         const curJobDiv = document.createElement('div');
+       
         curJobDiv.classList.add('w-1/2', 'rounded-lg', 'p-5', 'h-screen');
-        curJobDiv.id = `job-${this.job.id}`;
+        if (!this.job) {
+            const h1 = document.createElement('h1');
+            h1.classList.add('text-3xl');
+            h1.textContent = 'No jobs available';
+            curJobDiv.appendChild(h1);
+            return curJobDiv;
+        }
+        curJobDiv.id = `job-${this.job._id}`;
 
         const h1 = document.createElement('h1');
-        h1.classList.add('text-3xl');
+        h1.classList.add('text-3xl', 'underline');
         h1.textContent = this.job._title;
         curJobDiv.appendChild(h1);
 
@@ -58,16 +66,23 @@ export class CurrentJob {
         location.appendChild(applyBtn);
         curJobDiv.appendChild(location);
 
+        const workStudy = document.createElement('p');
+        workStudy.classList.add('text-base');
+        workStudy.textContent = `Work Study: ${this.job._workStudy ? 'Yes' : 'No'}`;
+        curJobDiv.appendChild(workStudy);
+
+        const hiringPeriod = document.createElement('p');
+        hiringPeriod.classList.add('text-base');
+        hiringPeriod.textContent = `Hiring Period: ${this.job._hiringPeriod.join(', ')}`;
+        curJobDiv.appendChild(hiringPeriod);
+
         const description = document.createElement('div');
-        description.classList.add('h-screen','overflow-y-scroll',  'w-full');
+        description.classList.add('h-screen',  'w-full');
         const fullJob = document.createElement('p');
         fullJob.textContent = `Full Job description: \n`;
         fullJob.appendChild(document.createTextNode(this.job._description));
         description.appendChild(fullJob);
         curJobDiv.appendChild(description);
-        // const listDiv = document.getElementById(`job-${this.job.id}`);
-        // listDiv.style.backgroundColor = '#f3f4f6';
-
         return curJobDiv;
     }
 }

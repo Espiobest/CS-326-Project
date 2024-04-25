@@ -98,14 +98,19 @@ export async function modifyUser(user) {
  * @throws {Error} - Throws an error if the counter cannot be found or if there
  * is a database issue.
  */
-
-
 export async function getUser() {
   const user = await db.get("user");
   return user.user;
 }
 
-
+/**
+ * Asynchronously retrieves the user's applied jobs from the database.
+ * 
+ * @async
+ * @returns {Promise<Object>} - A promise that resolves to the user's applied jobs list.
+ * @throws {Error} - Throws an error if the counter cannot be found or if there
+ * is a database issue.
+ */
 export async function getUserAppliedJobs() {
   const user = await db.get("user");
   return user.user.jobsApplied;
@@ -126,13 +131,15 @@ export async function loadJobs() {
 }
 
 
-/**
+/** Asynchronously clears the database by resetting the job list and user data.
  * 
+ * @async
+ * @throws {Error} - Throws an error if the operation fails
  */
 export async function clearDB(){
 
   db.get('user').then(function(doc) {
-    return db.put({
+    db.put({
       _id: 'user',
       _rev: doc._rev,
       user: new User()
