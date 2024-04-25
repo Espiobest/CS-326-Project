@@ -49,10 +49,10 @@ export class App {
 
     rootElm.appendChild(navbarElm);
     
+    //search bar
     const searchElm = document.createElement('div');
     //make searchElm display elements in a row
     searchElm.style.display = 'flex';
-    
 
     const searchInputElm = document.createElement('input');
     searchInputElm.type = 'text';
@@ -67,18 +67,46 @@ export class App {
     searchButton.innerText = 'Search';
     searchElm.appendChild(searchButton);
     
-    const preferencesButton = document.createElement('div');
-    preferencesButton.innerHTML = '<i class="fa-solid fa-sliders"></i>p';
-    preferencesButton.style.padding = '4px';
+    const preferencesButton = document.createElement('img');
+    preferencesButton.src = './assets/sliders-solid.svg';
+    preferencesButton.style.height = preferencesButton.style.width = '44px';
+    
+    const preferences = document.createElement('div');
+    preferences.innerHTML = 
+    `<div class="mb-5 rounded-lg bg-slate-200 p-5">
+    Pay: $<input type="text" id="pay"> or greater Skills: <input type="text" id="skill-input"> <ul id="skill-list"></ul> Work study? <input type="checkbox" name="" id="work-study">Hiring Period <select name="" id="hiring-period">
+      <option value="Any">Any</option>
+      <option value="Fall">Fall</option>
+      <option value="Spring">Spring</option>
+      <option value="Summer">Summer</option>
+    </select>
+  </div>`;
+    preferences.style.visibility = 'hidden';
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.getElementById('skill-input').value !== '') {
+        const skillInput = document.getElementById('skill-input');
+        const skill = skillInput.value;
+        skillInput.value = '';
+        document.getElementById('skill-list').innerHTML += `<li>${skill}<img src="./assets/x-solid.svg" height="10px" width="10px"></li>`
 
+      }
+    })
     preferencesButton.addEventListener('click', async e => {
-      
+      if ( preferences.style.visibility === 'hidden'){preferences.style.visibility = 'visible';}
+      else {preferences.style.visibility = 'hidden';}
     });
+
+  
+  // Get the values of the input fields
+  
+
+
     searchElm.appendChild(preferencesButton);
     rootElm.appendChild(searchElm);
+    rootElm.appendChild(preferences);
 
     
-    
+    //append main view to root
     rootElm.appendChild(this.#mainViewElm);
 
     let jobListElm = await new jobList(this.jobs).render();
@@ -98,6 +126,60 @@ export class App {
       this.#mainViewElm.appendChild(this.#jobBoardViewElm);
       
     });
+    
+    
+    searchButton.addEventListener('click', async () => {
+    const payInput = document.getElementById('pay');
+    const skillInput = document.getElementById('skill-list');
+    const workStudyCheckbox = document.getElementById('work-study');
+    const hiringPeriodSelect = document.getElementById('hiring-period');
+    const pay = payInput.value;
+    console.log(pay);
+    //check if pay is a number
+    if (isNaN(pay)) {
+      alert('Pay must be a number');
+      return;
+    }
+    //get skills from the items of skill-list
+    const skills = [];
+    for (let i = 0; i < skillInput.children.length; i++) {
+      const li = skillInput.children[i];
+      const skill = li.innerText;
+      skills.push(skill);
+    }
+    console.log(skills);
+    const workStudy = workStudyCheckbox.checked;
+    const hiringPeriod = hiringPeriodSelect.value;
+    console.log(this.jobs);
+    const filteredJobs = this.jobs.filter(job => {
+      // Apply the filters
+      if (pay && job.pay <= parseFloat(pay)) {
+        return false;
+      }
+      if (skills.length > 0 && !skills.some(skill => job.skills.includes(skill))) {
+        return false;
+      }
+      if (!workStudy) {
+        return false;
+      }
+      if (hiringPeriod !== 'Any' && !job.hiringPeriod.includes(hiringPeriod)) {
+        return false;
+      }
+      return true;
+    });
+    if (filteredJobs.length === 0) {
+      alert('No results found');
+      return;
+    }
+    console.log(filteredJobs);
+    
+    
+      jobListElm = await new jobList(filteredJobs).render();
+    this.#jobBoardViewElm.innerHTML = '';
+    this.#jobBoardViewElm.appendChild(jobListElm);
+    this.#jobBoardViewElm.appendChild(curJobElm);
+
+  });
     
     this.#applicationsViewElm = await new jobList(this.user._jobsApplied).render();
     

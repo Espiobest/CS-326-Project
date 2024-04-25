@@ -11,7 +11,7 @@ export class NavBar {
         nav.innerHTML = `
                 <div class="heading">
                     <div class="mx-auto max-w-screen-sm flex flex-wrap justify-between px-4">
-                        <img class = "rounded-full w-32 h-32" src = "assets/logo.png" alt ="JobsForUMass logo">
+                        <img class = "rounded-full w-32 h-32" src = "./assets/logo.png" alt ="JobsForUMass logo">
                         <div class="mx-auto px-4 py-8">
                             <div class="flex justify-between">
                                 <h1 class="text-4xl font-mono font-bold text-black mb-8">JobsForUMass
