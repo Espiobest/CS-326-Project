@@ -11,12 +11,26 @@ import { CurrentJob } from './currentJob.js';
 import { applications } from './applications.js';
 
 export class App {
+  /**
+   * @private profileViewElm - The HTML element for the profile view.
+   * */ 
   #profileViewElm = null;
+  /**
+   * @private mainViewElm - The HTML element for the main view, everything below the navbar.
+   * */
   #mainViewElm = null;
+ /**
+  * @private applicationsViewElm - The HTML element for the applications view.
+ */
   #applicationsViewElm = null;
   #jobBoardViewElm = null;
     #events = null;
-  constructor() {
+  /**
+   * Creates an instance of App.
+   * 
+   * @
+   */
+    constructor() {
     this.db = db;
     this.db.initDB();
     this.user = null;
@@ -24,7 +38,11 @@ export class App {
     this.jobs = null;
   }
 
+  
   async render(root) {
+    /**
+     * 
+     */
     this.user = await db.getUser();
     this.jobs = await db.loadJobs();
     if (this.jobs.length === 0){
@@ -33,6 +51,10 @@ export class App {
     const rootElm = document.getElementById(root);
     rootElm.innerHTML = '';
 
+    
+    /**
+     * @constant navbarElm - The HTML element for the navbar.
+     */
     const navbarElm = document.createElement('div');
     navbarElm.id = 'navbar';
     const navbar = new NavBar('jobBoard');
@@ -71,6 +93,9 @@ export class App {
     preferencesButton.src = './assets/sliders-solid.svg';
     preferencesButton.style.height = preferencesButton.style.width = '44px';
     
+    /**
+     * @constant preferences - The HTML element for the preferences pop-up
+     */
     const preferences = document.createElement('div');
     preferences.innerHTML = 
     `<div class="mb-5 rounded-lg bg-slate-200 p-5">
