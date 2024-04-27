@@ -1,5 +1,6 @@
 import { Events } from './Events.js';
 import { JobListItem } from './JobListItem.js';
+
 export class jobList {
     #events = null;
     jobs = null;
@@ -8,7 +9,7 @@ export class jobList {
         this.jobs = jobs;
     }
     
-    async render() {
+    async render(view = 'jobList') {
         const rootElm = document.createElement('div');
         rootElm.classList.add('w-1/2',  'bg-white', 'h-screen', 'overflow-y-auto', 'rounded');
         let i = 0;
@@ -17,7 +18,9 @@ export class jobList {
             const item = new JobListItem(job);
             const elm = await item.render();
             if (i == 0){
-                elm.style.backgroundColor = 'lightgray';
+                if (window.location.hash == '#jobBoard'){
+                    elm.style.backgroundColor = 'lightgray';
+                }
             }
             i++;
             elm.addEventListener("click", () => {
@@ -25,7 +28,6 @@ export class jobList {
             });
             rootElm.appendChild(elm);
         }
-        //this.#events.subscribe('applied to job', job)
         return rootElm;
     }
 }

@@ -5,6 +5,10 @@
 /* HTML: <div class="loader"></div> */
 html, body {margin: 0; height:100%; overflow: hidden}
 
+#main-view{
+  overflow-y: scroll !important;
+}
+
 .heading {
   background-color: #ba1b1d;
 }
@@ -52,4 +56,9 @@ html, body {margin: 0; height:100%; overflow: hidden}
 
 .fa-brands:hover{
   color: lightblue;
+}
+
+.navbar{
+  position: sticky;
+  height: 100%;
 }

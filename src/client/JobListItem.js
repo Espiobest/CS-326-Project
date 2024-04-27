@@ -1,12 +1,12 @@
 export class JobListItem {
     constructor(job) {
-        this.job = job;
+      this.job = job;
     }
-
+  
     async render() {
         const curJobDiv = document.createElement('div');
         curJobDiv.classList.add('bg-slate-200', 'rounded-lg', 'p-5', 'mb-5');
-        curJobDiv.id = `job-${this.job.id}`
+        curJobDiv.id = `job-${this.job._id}`
 
         const h1 = document.createElement('h1');
         h1.classList.add('text-3xl');
@@ -45,7 +45,18 @@ export class JobListItem {
         location.classList.add('text-base');
         location.textContent = `Location:  ${this.job._location} `;
         curJobDiv.appendChild(location);
+
+        const workStudy = document.createElement('p');
+        workStudy.classList.add('text-base');
+        workStudy.textContent = `Work Study: ${this.job._workStudy ? 'Yes' : 'No'}`;
+        curJobDiv.appendChild(workStudy);
+
+        const hiringPeriod = document.createElement('p');
+        hiringPeriod.classList.add('text-base');
+        hiringPeriod.textContent = `Hiring Period: ${this.job._hiringPeriod.join(', ')}`;
+        curJobDiv.appendChild(hiringPeriod);
+
         return curJobDiv;
     }
 }
-  
+    
