@@ -8,72 +8,133 @@ app.use(express.json())
 const headerFields = { "Content-Type": "application/json" };
 
 export async function loadJobs(response) {
-  const list = (await db.loadJobs());
-  response.writeHead(200, headerFields);
-  response.write(JSON.stringify(list));
-  response.end();
+  try {
+    const list = (await db.loadJobs());
+    response.writeHead(200, headerFields);
+    response.write(JSON.stringify(list));
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 export async function addJob(job, response) {
-  await db.addJob(job);
-  response.writeHead(200, headerFields);
-  response.write("job added");
-  response.end();
-
+  try {
+    await db.addJob(job);
+    response.writeHead(200, headerFields);
+    response.write("job added");
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 
 
 export async function modifyJob(job, response) {
-  await db.modifyJob(job);
-  
-  response.writeHead(200, headerFields);
-  response.write("job modified");
-  response.end();
+  try {
+    await db.modifyJob(job);
+    response.writeHead(200, headerFields);
+    response.write("job modified");
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 export async function getJob(id, response) {
-  const job = await db.getJob(id);
-  response.writeHead(200, headerFields);
-  response.write(JSON.stringify(job));
-  response.end();
+  try {
+    const job = await db.getJob(id);
+    response.writeHead(200, headerFields);
+    response.write(JSON.stringify(job));
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 export async function deleteJob(id, response) { 
-  await db.deleteJob(id);
-  response.writeHead(200, headerFields);
-  response.write("job deleted");
-  response.end();
+  try {
+    await db.deleteJob(id);
+    response.writeHead(200, headerFields);
+    response.write("job deleted");
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 export async function addUser(user, response) { 
-  await db.addUser(user);
-  response.writeHead(200, headerFields);
-  response.write("user added");
-  response.end();
+  try {
+    await db.addUser(user);
+    response.writeHead(200, headerFields);
+    response.write("user added");
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 
 export async function getUser(id, response) { 
-  const user = await db.getUser(id);
-  response.writeHead(200, headerFields);
-  response.write(JSON.stringify(user));
-  response.end();
+  try {
+    const user = await db.getUser(id);
+    response.writeHead(200, headerFields);
+    response.write(JSON.stringify(user));
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 
   
 }
 
 export async function modifyUser(user, response) {
-  await db.modifyUser(user);
-  response.writeHead(200, headerFields);
-  response.write("user modified");
-  response.end();
+  try {
+    await db.modifyUser(user);
+    response.writeHead(200, headerFields);
+    response.write("user modified");
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 export async function deleteUser(id, response) {
-  await db.deleteUser(id);
-  response.writeHead(200, headerFields);
-  response.write("user deleted");
-  response.end();
+  try {
+    await db.deleteUser(id);
+    response.writeHead(200, headerFields);
+    response.write("user deleted");
+    response.end();
+  } catch (error) {
+    console.error(error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 

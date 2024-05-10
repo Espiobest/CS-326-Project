@@ -11,55 +11,98 @@ export async function initDB(){
 
 
 export async function loadJobs() {
-  const list = (await jobs.allDocs({include_docs: true})).rows.map(row => row.doc);
-  return list;
+  try {
+    const list = (await jobs.allDocs({include_docs: true})).rows.map(row => row.doc);
+    return list;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function addJob(job) {
-  console.log(job);
-  await jobs.put(job);
+  try {
+    console.log(job);
+    await jobs.put(job);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 
 
 export async function modifyJob(job) {
-  const jobwRev = await jobs.get(job._id);
-  await jobs.remove(jobwRev);
-  
-  await jobs.put(job);
-  
+  try {
+    const jobwRev = await jobs.get(job._id);
+    await jobs.remove(jobwRev);
+    
+    await jobs.put(job);
+    
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function getJob(id) {
-  return jobs.get(id);
+  try {
+    return jobs.get(id);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function deleteJob(id) {
-  const job = await jobs.get(id);
-  await jobs.remove(job);
+  try {
+    const job = await jobs.get(id);
+    await jobs.remove(job);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 export async function addUser(user) {
-  await users.put(user);
+  try {
+    await users.put(user);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 
 export async function getUser(id) {
-  return users.get(id);
+  try {
+    return users.get(id);
 
-  
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function modifyUser(user) {
-  const userwRev = await users.get(user._id);
-  await users.remove(userwRev);
-  await users.put(user);
+  try {
+    const userwRev = await users.get(user._id);
+    await users.remove(userwRev);
+    await users.put(user);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function deleteUser(id) {
-  const user = await users.get(id);
-  await users.remove(user);
+  try {
+    const user = await users.get(id);
+    await users.remove(user);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
-
 
 
 
