@@ -5,8 +5,16 @@ const users = new PouchDB("users");
 const jobs = new PouchDB("jobs");
 
 export async function initDB(){
-  users.info();
-  jobs.info();
+  users.info().then(async function (result) {
+    if(result.doc_count === 0) {
+      await users.put({ _id: 'user', user: new User()});
+    }
+  });
+  jobs.info().then(async function (result) {
+    if(result.doc_count === 0) {
+      await jobs.put({ _id: 'job', jobs: [] });
+    }
+  });
 }
 
 
