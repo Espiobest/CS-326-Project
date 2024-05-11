@@ -112,3 +112,51 @@ export async function clearDB(){
   await modifyJob([]);
   await modifyUser(new User());
 }
+
+export async function loginUser(email, password) {
+  const result = await database.allDocs({
+    include_docs: true,
+    selector: { email },
+  });
+
+  console.log(result.rows);
+
+  const filterData = result.rows.filter(doc => doc.id === email);
+
+  console.log(filterData);
+
+
+  if (filterData.length === 0) {
+    return null;
+  }
+
+  const user = filterData[0].doc;
+
+  if (user.password !== password) {
+    console.log('Login failed: Incorrect password');
+    return null;
+  }
+
+  console.log('Login successful:', user);
+  return user;
+}
+
+export async function createUser(email, password, accountType) {
+  const user = {
+    _id: email,
+    password,
+    accountType,
+    name: '',
+    jobsApplied: [],
+  };
+
+  await database.put(user);
+
+  console.log('User signed up:', user);
+  return user;
+}
+
+// Generate a random id
+// function generateId() {
+//   return Math.random().toString(36).substr(2, 9);
+// }
