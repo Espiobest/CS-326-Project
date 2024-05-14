@@ -5,12 +5,9 @@
 /* HTML: <div class="loader"></div> */
 html, body {margin: 0; height:100%; overflow: hidden}
 
-#main-view{
-  overflow-y: scroll !important;
-}
-
 .heading {
   background-color: #ba1b1d;
+  max-height: 200px;
 }
 
 .loader {
@@ -61,4 +58,16 @@ html, body {margin: 0; height:100%; overflow: hidden}
 .navbar{
   position: sticky;
   height: 100%;
+}
+
+.signup-screen{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#signup{
+  height: 100%;
+  box-sizing: border-box;
 }

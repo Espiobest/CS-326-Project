@@ -14,16 +14,17 @@ export class NavBar {
     nav.innerHTML = `
       <div class="heading">
         <div class="mx-auto max-w-screen-sm flex flex-wrap justify-between px-4">
-          <img class="rounded-full w-32 h-32" src="./assets/logo.png" alt="JobsForUMass logo">
+          <img class="rounded-full w-20 h-20 sm:w-32 sm:h-32" src="./assets/logo.png" alt="JobsForUMass logo">
           <div class="mx-auto px-4 py-8">
             <div class="flex justify-between">
-              <h1 class="text-4xl font-mono font-bold text-black mb-8">JobsForUMass
+              <h1 class="text-xl font-mono font-bold text-black mb-8 sm:text-2xl md:text-4xl">JobsForUMass
                 <a class="fa-solid fa-user-circle fa-2x" style="margin-left:auto" href="profile" id="profile"> </a>
               </h1>
             </div>
             <a href="#jobBoard" class="text-lg font-bold hover:underline">Jobs</a>
             <span class="mx-3 text-gray-500">|</span>
             <a href="applications" class="text-lg font-bold hover:underline">Applications</a>
+            <button id="logout" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Logout</button>
           </div>
         </div>
       </div>
@@ -46,6 +47,12 @@ export class NavBar {
         // Call the navigateTo function with the view name
         await this.#events.publish('navigateTo', view);
       });
+    });
+
+    const logout = nav.querySelector('#logout');
+    logout.addEventListener('click', async e => {
+      e.preventDefault();
+      await this.#events.publish('logout');
     });
 
     // Return the rendered navigation bar element

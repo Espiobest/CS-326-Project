@@ -48,22 +48,48 @@ export class LoginScreen {
         e.preventDefault();
         this.email = emailInput.value;
         this.password = passwordInput.value;
-        const user = await this.db.loginUser(this.email, this.password);
-        if (user) {
+        fetch('http://localhost:4000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            'Access-Control-Allow-Credentials': 'true',
+          },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        })
+        .then(res=>res.json())
+        .then(async (user) => {
+          // if ()
+          user = user.user;
           console.log('Login successful:', user);
-          this.#events.publish('loggedIn', user);
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+          await this.db.modifyUser(user);
+          this.#events.publish('loggedIn', user, user.accountType);
           this.#events.publish('navigateTo', 'jobBoard');
-        } else {
-          console.log('Login failed: Invalid email or password');
-          alert('Invalid email or password');
-        }
+        })
+        .catch(() => {
+          console.log('Login failed: Invalid email or password')
+        })
+
+        // const user = await this.db.loginUser(this.email, this.password);
+        // if (user) {
+        //   console.log('Login successful:', user);
+        //   this.#events.publish('loggedIn', user);
+        //   this.#events.publish('navigateTo', 'jobBoard');
+        // } else {
+        //   console.log('Login failed: Invalid email or password');
+        //   alert('Invalid email or password');
+        // }
       });
 
     signupLink.addEventListener('click', (e) => {
       e.preventDefault();
       this.#events.publish('navigateTo', 'signup');
     });
-
+    console.log("Returning loginscreen");
     return loginScreen;
   }
 }

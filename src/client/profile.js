@@ -3,15 +3,15 @@ export class Profile {
       this.view = view;
     }
 
-    render(){
+    render(user){
         const rootElm = `
             <h1 class="text-4xl font-bold text-center">Your Profile</h1>
             <div class="flex justify-center items-center px-4">
                 <img src="assets/logo.png" class="w-20 h-20 rounded-full" alt="profile">
                 <div class="ml-4">
-                    <h2 class="text-xl font-bold">John Doe</h2>
+                    <h2 class="text-xl font-bold">${user._name}</h2>
                     <p class="text-gray-500">
-                        <span class="font-bold">Email: johndoe@umass.edu</span>
+                        <span class="font-bold">Email: ${user._email}</span>
                         <span>
                     </p>
                 </div>
@@ -25,7 +25,7 @@ export class Profile {
             <div class="flex justify-center items-center mt-4">
                 <h2 class="text-lg text-center font-bold">Personal Statement</h2>
             </div>
-            <input id="ps" type="text" class="align-center border-2 border-gray-200 rounded-lg p-2 w-full">
+            <input id="ps" type="text" class="align-center border-2 border-gray-200 rounded-lg p-2 w-full"></input>
             <h2 class="text-lg text-center font-bold">Resume</h2>
             <div class="text-center border-2 border-gray-200 rounded-lg w-full" id="resume" style="height: 10%">
                 Upload Here <i class="fa fa-upload" aria-hidden="true"></i>

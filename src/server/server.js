@@ -1,11 +1,14 @@
 import express from 'express';
 import * as db from './db.js';
+import * as utils from './utils.js';
+import cors from 'cors';
 const PORT = 4000;
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 
-const headerFields = { "Content-Type": "application/json" };
+const headerFields = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
 
 export async function loadJobs(response) {
   try {
@@ -80,7 +83,7 @@ export async function deleteJob(id, response) {
 }
 export async function addUser(user, response) { 
   try {
-    await db.addUser(user);
+    await db.addUser(user, "test");
     response.writeHead(200, headerFields);
     response.write("user added");
     response.end();
@@ -91,7 +94,6 @@ export async function addUser(user, response) {
     response.end();
   }
 }
-
 
 export async function getUser(id, response) { 
   try {
@@ -105,8 +107,34 @@ export async function getUser(id, response) {
     response.write(error.message);
     response.end();
   }
+}
 
-  
+export async function addNewUser(user, password, response) {
+  try {
+    await db.addUser(user, password);
+    response.writeHead(200, headerFields);
+    response.write(JSON.stringify(user));
+    response.end();
+  } catch (error) {
+    response.writeHead(500, headerFields);
+    response.write("user exists");
+    response.end();
+  }
+}
+
+export async function addNewEmployer(employer, password, response) {
+  try {
+    console.log("adding employer", employer);
+    await db.addEmployer(employer, password);
+    response.writeHead(200, headerFields);
+    response.write("employer added");
+    response.end();
+  } catch (error) {
+    console.log("error", error);
+    response.writeHead(500, headerFields);
+    response.write(error.message);
+    response.end();
+  }
 }
 
 export async function modifyUser(user, response) {
@@ -149,7 +177,6 @@ app.get('/jobs/:id', async (req, res) => {
 })
 
 app.post('/jobs', async (req, res) => { 
-  console.log(req.body);
   const job = req.body;
   await addJob(job, res);
 });
@@ -174,6 +201,19 @@ app.post('/users', async (req, res) => {
   await addUser(user, res);
 });
 
+app.post('/newUser', async (req, res) => {
+  const user = req.body.user;
+  const password = req.body.password;
+  await addNewUser(user, password, res);
+});
+
+app.post('/newEmployer', async (req, res) => {
+  console.log("BODY", req.body);
+  const employer = req.body.employer;
+  const password = req.body.password;
+  await addNewEmployer(employer, password, res);
+});
+
 app.patch('/users/:id', async (req, res) => { //object ids must match
   const user = req.body;
   await modifyUser(user, res);
@@ -184,7 +224,73 @@ app.delete('/users/:id', async (req, res) => {
   await deleteUser(id, res);
 })
 
+app.delete('/deleteAll', async (req, res) => {
+  await db.clearDB();
+  res.writeHead(200, headerFields);
+  res.write("deleted all");
+  res.end();
+});
+
+async function login(res, type, email, password){
+  try {
+    let userFromDB;
+    if (type === "applicant") {
+      userFromDB = await db.getUser(email);
+      userFromDB.accountType = "applicant";
+    }
+    else{
+      userFromDB = await db.getEmployer(email);
+      userFromDB.accountType = "employer";
+    }
+    let salt = userFromDB.salt;
+    let hash = userFromDB.passwordHash;
+    if (utils.validatePassword(password, salt, hash)) {
+      console.log("passwords match")
+      res.writeHead(200, headerFields);
+      res.write(JSON.stringify(userFromDB));
+      res.end();
+    } else {
+      console.log("incorrect password")
+      res.writeHead(401, headerFields);
+      res.write(JSON.stringify("incorrect password"));
+      res.end();
+    }
+  } catch (error) {
+    console.log(error);
+    if (error.status === 404) {
+      res.writeHead(401, headerFields);
+      res.write(JSON.stringify("incorrect email"));
+      res.end();
+    }
+    else{
+      res.writeHead(401, headerFields);
+      res.write(JSON.stringify(error));
+      res.end();
+    } 
+  }
+}
+
+app.post('/login', async (req, res) => {
+  const email = req.body.email.trim();
+  const password = req.body.password.trim();
+  console.log("email: ", email, "password: ", password);
+  
+  try{
+    login(res, "applicant", email, password);
+  }
+  catch(err){
+    try{
+      login(res, "employer", email, password);
+    }
+    catch(err){
+      res.writeHead(401, headerFields);
+      res.write(JSON.stringify("incorrect email/password"));
+      res.end();
+    }
+  }  
+});
+
 app.listen(PORT, () => {
-  console.log(`Server is running on <http://localhost>:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 

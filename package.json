@@ -46,7 +46,7 @@
   "scripts": {
     "dev": "",
     "test": "",
-    "start": "node src/server/server.js",
+    "start": "node src/server/server.js | npm run milestone-02",
     "milestone-01": "http-server src/docs/milestone-01 -p 3000 -c-1 -o -s",
     "milestone-02": "http-server src/client -p 3000 -c-1 -o -s",
     "validate-html": "html-validate src/**/*.html",
@@ -58,6 +58,8 @@
     "prettier": "^3.2.5"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.19.2",
     "pouchdb": "^8.0.1",
     "pouchdb-upsert": "^2.2.0",

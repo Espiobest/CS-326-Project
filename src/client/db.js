@@ -3,11 +3,10 @@ import { User } from "./user.js";
 var database = new PouchDB("JobsDB");
 
 export async function initDB(){
-  // add empty jobList and user data if database is empty
+  // add empty jobList if database is empty
   database.info().then(async function (result) {
     if(result.doc_count === 0) {
       await database.put({ _id: 'job', jobs: [] });
-      await database.put({ _id: 'user', user: new User()});
     }
   });
 }
@@ -39,12 +38,13 @@ export async function modifyJob(jobList) {
   * @throws {Error} - Throws an error if the counter cannot be found or if there
   * is a database issue.
 */
-export async function modifyUser(user) {
+export async function modifyUser(user, accountType) {
   database.get('user').then(function(doc) {
     database.put({
       _id: 'user',
       _rev: doc._rev,
-      user: user
+      user: user,
+      accountType: accountType,
     });
   }).catch(err => {
     throw new Error(`Failed to modify user: ${err.message}`);
@@ -63,6 +63,7 @@ export async function getUser() {
 
   try{
     const user = await database.get("user");
+    console.log(user.user);
     return user.user;
   }
   catch(err){
@@ -98,8 +99,14 @@ export async function getUserAppliedJobs() {
  * is a database issue.
  */
 export async function loadJobs() {
-  const jobs = await database.get("job");
-  return jobs.jobs;
+  try{
+    const jobs = await database.get("job");
+    return jobs.jobs;
+  }
+  catch(err){
+    await database.put({ _id: 'job', jobs: [] });
+    return [];
+  }
 }
 
 
@@ -109,52 +116,12 @@ export async function loadJobs() {
  * @throws {Error} - Throws an error if the operation fails
  */
 export async function clearDB(){
-  await modifyJob([]);
-  await modifyUser(new User());
+  database.destroy().then(
+    database = new PouchDB("JobsDB")
+  );
+  // initDB();
 }
 
-export async function loginUser(email, password) {
-  const result = await database.allDocs({
-    include_docs: true,
-    selector: { email },
-  });
-
-  console.log(result.rows);
-
-  const filterData = result.rows.filter(doc => doc.id === email);
-
-  console.log(filterData);
-
-
-  if (filterData.length === 0) {
-    return null;
-  }
-
-  const user = filterData[0].doc;
-
-  if (user.password !== password) {
-    console.log('Login failed: Incorrect password');
-    return null;
-  }
-
-  console.log('Login successful:', user);
-  return user;
-}
-
-export async function createUser(email, password, accountType) {
-  const user = {
-    _id: email,
-    password,
-    accountType,
-    name: '',
-    jobsApplied: [],
-  };
-
-  await database.put(user);
-
-  console.log('User signed up:', user);
-  return user;
-}
 
 // Generate a random id
 // function generateId() {

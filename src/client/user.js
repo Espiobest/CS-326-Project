@@ -1,16 +1,12 @@
 export class User {
-    constructor(id, name, major, gpa, address, graduation, phone, email, citizenship) {
+    constructor(id, name, graduation, email, location, personalStatement) {
       this._id = id;
       this._name = name;
-      this._major = major;
-      this._gpa = gpa;
-      this._address = address;
       this._graduation = graduation;
-      this._phone = phone;
       this._email = email;
-      this._citizenship = citizenship;
+      this._location = location;
       this._profile = '';
-      this._personalStatement = '';
+      this._personalStatement = personalStatement;
       this._personalLinks = [];
       this._resume = null;
       this._jobsApplied = [];
@@ -32,30 +28,6 @@ export class User {
       this._name = value;
     }
   
-    // Getter and setter for major
-    get major() {
-      return this._major;
-    }
-    set major(value) {
-      this._major = value;
-    }
-  
-    // Getter and setter for gpa
-    get gpa() {
-      return this._gpa;
-    }
-    set gpa(value) {
-      this._gpa = value;
-    }
-  
-    // Getter and setter for address
-    get address() {
-      return this._address;
-    }
-    set address(value) {
-      this._address = value;
-    }
-  
     // Getter and setter for graduation
     get graduation() {
       return this._graduation;
@@ -63,15 +35,7 @@ export class User {
     set graduation(value) {
       this._graduation = value;
     }
-  
-    // Getter and setter for phone
-    get phone() {
-      return this._phone;
-    }
-    set phone(value) {
-      this._phone = value;
-    }
-  
+
     // Getter and setter for email
     get email() {
       return this._email;
