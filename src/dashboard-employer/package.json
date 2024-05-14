@@ -1,0 +1,32 @@
+{
+  "name": "jobsforme",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "more to come",
+  "private": true,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "employer-dashboard": "http-server src/client -p 3000 -c-1 -o -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lous-e/employer-dashboard.git"
+  },
+  "author": "Om Mehta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lous-e/employer-dashboard/issues"
+  },
+  "homepage": "https://github.com/lous-e/employer-dashboard#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "json-server": "^1.0.0-alpha.23"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

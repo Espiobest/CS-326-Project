@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>JobsForUMass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js"></script>
+    <script type = "module">
+        tailwind.config = {
+          theme: {
+            extend: {
+                colors: {
+                    'charcoal': '#564d4a',
+                    'pearl-white': '#f7f4f3',
+                    'burgundy': '#7f1f3a',
+                    'rosewood': '#984b61',
+                    'crimson': '#ba1b1d',
+                    'coral-red': '#ff6663',
+                    transparent: 'transparent',
+                    current: 'currentColor',
+                    // black: colors.black,
+                    // white: colors.white,
+                    'sand': "#7a7170",
+                    "gray": {
+                        500: "#6b7280",
+                        700: "#374151"
+                    }
+                    // emerald: colors.emerald,
+                    // indigo: colors.indigo,
+                    // yellow: colors.yellow,
+                }
+            }
+          }
+        }
+    </script> 
+    <script defer type = "module" src="./index.js"></script>   
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
