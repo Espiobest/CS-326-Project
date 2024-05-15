@@ -11,7 +11,7 @@ export class Profile {
                 <div class="ml-4">
                     <h2 class="text-xl font-bold">${user._name}</h2>
                     <p class="text-gray-500">
-                        <span class="font-bold">Email: ${user._email}</span>
+                        <span class="font-bold">Email: ${user.email}</span>
                         <span>
                     </p>
                 </div>

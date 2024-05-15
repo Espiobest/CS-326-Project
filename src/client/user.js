@@ -1,9 +1,9 @@
 export class User {
     constructor(id, name, graduation, email, location, personalStatement) {
-      this._id = id;
+      this.id = id;
       this._name = name;
       this._graduation = graduation;
-      this._email = email;
+      this.email = email;
       this._location = location;
       this._profile = '';
       this._personalStatement = personalStatement;
@@ -12,13 +12,6 @@ export class User {
       this._jobsApplied = [];
     }
   
-    // Getter and setter for id
-    get id() {
-      return this._id;
-    }
-    set id(value) {
-      this._id = value;
-    }
   
     // Getter and setter for name
     get name() {
@@ -34,14 +27,6 @@ export class User {
     }
     set graduation(value) {
       this._graduation = value;
-    }
-
-    // Getter and setter for email
-    get email() {
-      return this._email;
-    }
-    set email(value) {
-      this._email = value;
     }
   
     // Getter and setter for citizenship

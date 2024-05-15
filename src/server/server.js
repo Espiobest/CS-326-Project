@@ -264,18 +264,22 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/logoutUser', async (req, res) => {
+app.post('/logout', async (req, res) => {
   const user = req.body.user;
   const accountType = req.body.accountType;
-  // console.log(user);
-  if (accountType === "applicant") {
-    await db.modifyUser(user);
+  try{
+    if (accountType === "applicant") {
+      await db.modifyUser(user);
+    }
+    else{
+      await db.modifyEmployer(user);
+    }
   }
-  else{
-    await db.modifyEmployer(user);
+  catch (err){
   }
+  
   res.writeHead(200, headerFields);
-  res.write("logged out");
+  res.write(JSON.stringify("logged out"));
   res.end();
 });
 

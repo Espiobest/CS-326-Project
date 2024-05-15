@@ -9,7 +9,7 @@ export class NavBar {
 
     async render() {
         const nav = document.createElement('nav');
-        nav.classList.add('bg-burgundy', 'py-4');
+        nav.classList.add('bg-burgundy', 'py-4', 'heading');
         nav.innerHTML = /*html*/`
         <div class="px-5 container flex items-center">
         <!-- Logo -->

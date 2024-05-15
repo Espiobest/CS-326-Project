@@ -60,7 +60,7 @@ export class LoginScreen {
             password: this.password,
           }),
         })
-        .then(async (res)=>await res.json())
+        .then(async (res)=>(await res.json()))
         .then(async (user) => {
           if (user.accountType === 'applicant'){
             user.user.accountType = 'applicant';
@@ -77,17 +77,8 @@ export class LoginScreen {
         })
         .catch((err) => {
           console.log('Login failed: Invalid email or password', err);
+          alert("Incorrect Email or Password");
         })
-
-        // const user = await this.db.loginUser(this.email, this.password);
-        // if (user) {
-        //   console.log('Login successful:', user);
-        //   this.#events.publish('loggedIn', user);
-        //   this.#events.publish('navigateTo', 'jobBoard');
-        // } else {
-        //   console.log('Login failed: Invalid email or password');
-        //   alert('Invalid email or password');
-        // }
       });
 
     signupLink.addEventListener('click', (e) => {

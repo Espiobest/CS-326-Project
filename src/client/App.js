@@ -16,6 +16,7 @@ export class App {
   #mainViewElm = null;
   #curJobElm = null;
   #jobListElm = null;
+  #navbar = null;
   #applicationsViewElm = null;
   #jobBoardViewElm = null;
   #events = null;
@@ -32,8 +33,11 @@ export class App {
 
   async render(root) {
     const storedUser = localStorage.getItem('loggedInUser');
-    if (storedUser && storedUser != "undefined") {
+    if (storedUser && storedUser.user != "undefined") {
       this.loggedInUser = JSON.parse(storedUser);
+    }
+    else{
+      this.#navigateTo('login');
     }
 
     // this.user = await db.getUser();
@@ -45,7 +49,7 @@ export class App {
     await this.renderUI();
     this.#events.subscribe('navigateTo', (view) => {
       this.#navigateTo(view);
-      navbar.view = view;
+      this.#navbar.view = view;
     });
     this.#events.subscribe('job clicked', async (job) => {
       if (window.location.hash === '#jobBoard') {
@@ -64,7 +68,12 @@ export class App {
         this.#mainViewElm.appendChild(searchElm);
         this.#mainViewElm.appendChild(this.#jobBoardViewElm);
       }
-      this.#jobBoardViewElm.removeChild(this.#curJobElm);
+      try{
+        this.#jobBoardViewElm.removeChild(this.#curJobElm);
+      }
+      catch{
+        
+      }
       this.#curJobElm = await new CurrentJob(job).render();
       this.#curJobElm.id = `job-${job._id}`;
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
@@ -75,7 +84,7 @@ export class App {
         await this.db.modifyJob(this.jobs);
       }
       this.loggedInUser._jobsApplied.push(job);
-
+      localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser));
       this.jobs = this.jobs.filter((jobListing) => {
         return !(JSON.stringify(job) === JSON.stringify(jobListing));
       });
@@ -93,7 +102,7 @@ export class App {
       }
 
       await this.db.modifyJob(this.jobs);
-     
+      
       await this.db.modifyUser(this.loggedInUser, this.loggedInUser.accountType);
       this.#jobBoardViewElm.removeChild(this.#curJobElm);
       this.#jobBoardViewElm.removeChild(this.#jobListElm);
@@ -114,23 +123,25 @@ export class App {
     });
 
     this.#events.subscribe('logout', async () => {
-      this.loggedInUser = localStorage.getItem('loggedInUser');
+      this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
       localStorage.removeItem('loggedInUser');
       await this.db.clearDB();
-      if (this.loggedInUser) {
-        // fetch('http://localhost:4000/logoutUser', {
-        // method: 'POST',
-        // headers: {
-        //   'Content-Type': 'application/json',
-        // },
-        // body: JSON.stringify({
-        //   user: this.loggedInUser,
-        //   accountType: this.loggedInUser.accountType,
-        //   })
-        // })
-        this.loggedInUser = null;
-      }
 
+      if (this.loggedInUser){
+        let type = document.getElementsByClassName("heading")[0].style.backgroundColor == "#ba1b1d"? 'employer': 'applicant';
+        fetch('http://localhost:4000/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: this.loggedInUser,
+            accountType: this.loggedInUser?.accountType || this.user?.accountType || type,
+          }),
+        });
+      }
+      
+      this.loggedInUser = null;
       this.rootElm.innerHTML = '';
       await this.renderUI();
       this.#navigateTo('login');
@@ -143,6 +154,7 @@ export class App {
       localStorage.setItem('loggedInUser', JSON.stringify(user));
       if (user.accountType === 'applicant') {
         await this.renderUI();
+        window.location.reload();
         this.#navigateTo('jobBoard');
       }
       else {
@@ -162,7 +174,6 @@ export class App {
       }
       else if (this.loggedInUser.accountType === 'employer'){
         fetchEmployerDash();
-        // this.#navigateTo('applications');
       }
     } else {
       this.#navigateTo('login');
@@ -178,23 +189,29 @@ export class App {
         this.loggedInUser = JSON.parse(user);
       }
       else{
-        this.loggedInUser = this.db.getUser();
+        let searchElm = document.getElementById('search-bar');
+        if (searchElm) {
+          searchElm.style.display = 'none';
+        }
+        this.#mainViewElm.innerHTML = '';
+        this.#mainViewElm.appendChild(await this.#loginScreen.render());
       }
     }
 
     this.#mainViewElm.innerHTML = '';
     if (view === 'jobBoard') {
       
+      // console.log(document.getElementById('job-3'));
       if (!this.loggedInUser) {
         this.#navigateTo('login');
-        return;
       }
       let searchElm = document.getElementById('search-bar');
+      let preferences = document.getElementById('preferences');
       if (searchElm) {
         searchElm.style.display = 'flex';
       }
       else{
-        searchElm = this.renderSearch();
+        [searchElm, preferences] = this.renderSearch();
       }
       
       this.jobs = await this.db.loadJobs();
@@ -209,72 +226,82 @@ export class App {
 
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
-      this.#mainViewElm.appendChild(searchElm);
 
+      this.#mainViewElm.appendChild(searchElm);
+      this.#mainViewElm.appendChild(preferences);
       this.#mainViewElm.appendChild(this.#jobBoardViewElm); 
     } else if (view === 'applications') {
       
         if (!this.loggedInUser) {
-          this.#navigateTo('login');
-          return;
+          let searchElm = document.getElementById('search-bar');
+          if (searchElm) {
+            searchElm.style.display = 'none';
+          }
+          this.#mainViewElm.innerHTML = '';
+          this.#mainViewElm.appendChild(await this.#loginScreen.render());
         }
-        this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
+        else{
+          this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
+          if (this.#applicationsViewElm && this.#applicationsViewElm.firstChild && this.#applicationsViewElm.firstChild.id !== "reset"){
+            const resetButton = document.createElement('button');
+            resetButton.id = "reset"
+            resetButton.textContent = 'Reset';
+            resetButton.addEventListener('click', async () => {
+              this.loggedInUser._jobsApplied = [];
+  
+              this.jobs = jobSpoof();
+              this.#navigateTo('jobBoard');
+              window.location.reload(true);
+            });
+            this.#applicationsViewElm.insertBefore(resetButton, this.#applicationsViewElm.firstChild);
+          }
+          this.#mainViewElm.appendChild(this.#applicationsViewElm);
+          let searchElm = document.getElementById('search-bar');
+          if (searchElm){
+            searchElm.style.display = 'none';
+          }
+        }
 
-        if (this.#applicationsViewElm && this.#applicationsViewElm.firstChild && this.#applicationsViewElm.firstChild.id !== "reset"){
-          const resetButton = document.createElement('button');
-          resetButton.id = "reset"
-          resetButton.textContent = 'Reset';
-          resetButton.addEventListener('click', async () => {
-            this.loggedInUser._jobsApplied = [];
-
-            this.jobs = jobSpoof();
-            this.#navigateTo('jobBoard');
-            window.location.reload(true);
-          });
-          this.#applicationsViewElm.insertBefore(resetButton, this.#applicationsViewElm.firstChild);
-        }
-        this.#mainViewElm.appendChild(this.#applicationsViewElm);
-        let searchElm = document.getElementById('search-bar');
-        if (searchElm){
-          searchElm.style.display = 'none';
-        }
+       
         
     } else if (view === 'profile') {
         if (!this.loggedInUser) {
           this.#navigateTo('login');
-          return;
         }
-        this.#profileViewElm.innerHTML = new Profile().render(this.loggedInUser);
-        this.#mainViewElm.appendChild(this.#profileViewElm);
-      
-        let searchElm = document.getElementById('search-bar');
-        if (searchElm){
-          searchElm.style.display = 'none';
-        }
+        else{
+          this.#profileViewElm.innerHTML = new Profile().render(this.loggedInUser);
+          this.#mainViewElm.appendChild(this.#profileViewElm);
         
-        if (this.loggedInUser._resume){
-          // add remove button
-          let removeButton = document.createElement('button');
-          removeButton.textContent = 'Remove Resume';
-          this.#profileViewElm.appendChild(removeButton);
-          removeButton.addEventListener('click', async e => {
-            this.loggedInUser._resume = null;
-            await this.db.modifyUser(this.loggedInUser);
-            document.getElementById('resumeDiv').innerHTML = '';
-          });
-          PDFObject.embed(URL.createObjectURL(this.loggedInUser._resume), "#resumeDiv");
-        }
-  
-        document.getElementById('ps').value = this.loggedInUser._personalStatement || "Enter a personal statement here";
-        document.getElementById('submit').addEventListener('click', async e => {
-          this.loggedInUser._personalStatement = document.getElementById('ps').value;
-          let resume = document.getElementById('resume').files;
-          if (resume.length > 0){
-            this.loggedInUser._resume = resume[0];
+          let searchElm = document.getElementById('search-bar');
+          if (searchElm){
+            searchElm.style.display = 'none';
           }
-          await this.db.modifyUser(this.loggedInUser);
-          alert('User details saved');
-        });
+          
+          if (this.loggedInUser._resume){
+            // add remove button
+            let removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove Resume';
+            this.#profileViewElm.appendChild(removeButton);
+            removeButton.addEventListener('click', async e => {
+              this.loggedInUser._resume = null;
+              await this.db.modifyUser(this.loggedInUser, this.loggedInUser.accountType);
+              document.getElementById('resumeDiv').innerHTML = '';
+            });
+            PDFObject.embed(URL.createObjectURL(this.loggedInUser._resume), "#resumeDiv");
+          }
+    
+          document.getElementById('ps').value = this.loggedInUser._personalStatement || "Enter a personal statement here";
+          document.getElementById('submit').addEventListener('click', async e => {
+            this.loggedInUser._personalStatement = document.getElementById('ps').value;
+            let resume = document.getElementById('resume').files;
+            if (resume.length > 0){
+              this.loggedInUser._resume = resume[0];
+            }
+            localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser));
+            await this.db.modifyUser(this.loggedInUser, this.loggedInUser.accountType);
+            alert('User details saved');
+          });
+        }
 
     } else if (view === 'login') {
       let searchElm = document.getElementById('search-bar');
@@ -318,6 +345,7 @@ export class App {
     preferencesButton.style.height = preferencesButton.style.width = '44px';
 
     const preferences = document.createElement('div');
+    preferences.id = 'preferences';
     preferences.innerHTML = `
       <div class="mb-5 rounded-lg bg-slate-200 p-5">
         Pay: $<input type="text" id="pay"> or greater Skills: <input type="text" id="skill-input"> <ul id="skill-list"></ul>
@@ -358,7 +386,7 @@ export class App {
       }
     });
     preferencesButton.addEventListener('click', async (e) => {
-      if (preferences.style.display === 'none') {
+        if (preferences.style.display === 'none') {
         preferences.style.display = 'block';
       } else {
         preferences.style.display = 'none';
@@ -368,13 +396,14 @@ export class App {
     searchElm.appendChild(preferencesButton);
     this.rootElm.appendChild(searchElm);
     this.rootElm.appendChild(preferences);
+    // this.#jobBoardViewElm.parentElement.appendChild(preferences);
+    // searchElm.appendChild(preferences);
 
     searchInputElm.addEventListener('input', async (e) => {
       const filter = e.target.value;
       this.#jobListElm = await new jobList(this.jobs.filter(job => job._title.toLowerCase().includes(filter) || job._brief.toLowerCase().includes(filter))).render();
       this.#jobBoardViewElm.innerHTML = '';
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
-      this.#jobBoardViewElm.appendChild(this.#curJobElm);
       this.#mainViewElm.appendChild(this.#jobBoardViewElm);
     });
 
@@ -397,7 +426,7 @@ export class App {
       const workStudy = workStudyCheckbox.value;
       const hiringPeriod = hiringPeriodSelect.value;
       const filteredJobs = this.jobs.filter(job => {
-        if (pay && job.pay <= parseFloat(pay)) {
+        if (pay && job._pay <= parseFloat(pay)) {
           return false;
         }
         if (skills.length > 0 && !skills.some(skill => job._skills.map(j => j.toLowerCase()).includes(skill))) {
@@ -421,8 +450,7 @@ export class App {
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
     });
-
-    return searchElm;
+    return [searchElm, preferences];
   }
 
   async renderUI(){
@@ -434,8 +462,8 @@ export class App {
 
     const navbarElm = document.createElement('div');
     navbarElm.id = 'navbar';
-    const navbar = new NavBar('jobBoard');
-    navbarElm.appendChild(await navbar.render());
+    this.#navbar = new NavBar('jobBoard');
+    navbarElm.appendChild(await this.#navbar.render());
 
     // navbarElm.appendChild(logoutButton);
 

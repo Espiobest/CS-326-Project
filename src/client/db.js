@@ -4,31 +4,15 @@ var database = new PouchDB("JobsDB");
 
 export async function initDB(){
   // add empty jobList if database is empty
-  database.info().then(async function (result) {
-    if(result.doc_count === 0) {
-      await database.put({ _id: 'job', jobs: [] });
+  database.allDocs({include_docs: true}).then(function(result) {
+    let ids = result.rows.filter(row => row.id === 'job' || row.id === 'user').map(row => row.id);
+    if (!ids.includes('job')) {
+      database.put({ _id: 'job', jobs: [] });
+    }
+    if (!ids.includes('user')) {
+      database.put({ _id: 'user', user: new User(), accountType: "" });
     }
   });
-}
-
-/**
- * Asynchronously modifies an existing job object in the database.
- *
- * @async
- * @param {Array} jobList - The updated job list to store.
- * @throws {Error} - Throws an error if the operation fails, e.g., the counter
- * does not exist or database issues.
- */
-export async function modifyJob(jobList) {
-  database.get('job').then(function(doc) {
-    return database.put({
-      _id: 'job',
-      _rev: doc._rev,
-      jobs: jobList
-    });
-  }).catch(err => {
-    throw new Error(`Failed to modify job: ${err.message}`);
-  })
 }
 
 /**
@@ -39,7 +23,6 @@ export async function modifyJob(jobList) {
   * is a database issue.
 */
 export async function modifyUser(user, accountType) {
-  console.log(user, accountType);
   database.get('user').then(function(doc) {
     database.put({
       _id: 'user',
@@ -48,6 +31,7 @@ export async function modifyUser(user, accountType) {
       accountType: accountType,
     });
   }).catch(err => {
+    console.log(err);
     throw new Error(`Failed to modify user: ${err.message}`);
   });
 }
@@ -110,6 +94,21 @@ export async function loadJobs() {
 }
 
 
+export async function modifyJob(jobs){
+  database.get('job').then(function(doc) {
+    database.put({
+      _id: 'job',
+      _rev: doc._rev,
+      jobs: jobs,
+    });
+  }).catch(err => {
+    console.log(err);
+    throw new Error(`Failed to modify jobs: ${err.message}`);
+  });
+
+
+}
+
 /** Asynchronously clears the database by resetting the job list and user data.
  * 
  * @async
@@ -117,6 +116,7 @@ export async function loadJobs() {
  */
 export async function clearDB(){
   await database.destroy();
+  console.log("Database cleared");
   database = new PouchDB("JobsDB");
   // initDB();
 }

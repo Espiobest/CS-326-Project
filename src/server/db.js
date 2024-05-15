@@ -25,7 +25,7 @@ export async function addUser(user, password) {
   try {
     const {salt, passwordHash} = utils.saltHashPassword(password);
     await users.put({
-      _id: user._email,
+      _id: user.email,
       user: user,
       salt: salt,
       passwordHash: passwordHash,
@@ -49,7 +49,8 @@ export async function getUser(id) {
 
 export async function modifyUser(user) {
   try {
-    const userwRev = await users.get(user._email);
+
+    const userwRev = await users.get(user.email);
     let password = userwRev.passwordHash;
     let salt = userwRev.salt;
     await users.remove(userwRev);
@@ -60,7 +61,6 @@ export async function modifyUser(user) {
       salt: salt,
     });
   } catch (error) {
-    console.error(error);
     throw error;
   }
 }
