@@ -62,8 +62,7 @@ export class LoginScreen {
         })
         .then(res=>res.json())
         .then(async (user) => {
-          user = user.user;
-          console.log('Login successful:', user);
+          user = user.employer;
           localStorage.setItem('loggedInUser', JSON.stringify(user));
           await this.db.modifyUser(user);
           this.#events.publish('loggedIn', user, user.accountType);

@@ -134,20 +134,24 @@ export class App {
     });
 
     this.#events.subscribe('logout', async () => {
+      this.loggedInUser = localStorage.getItem('loggedInUser');
       localStorage.removeItem('loggedInUser');
       console.log("Logout clicked");
       await this.db.clearDB();
-      fetch('http://localhost:4000/logoutUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user: this.loggedInUser,
-          accountType: this.loggedInUser.accountType,
-        })
-      })
-      this.loggedInUser = null;
+      if (this.loggedInUser) {
+        // fetch('http://localhost:4000/logoutUser', {
+        // method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // },
+        // body: JSON.stringify({
+        //   user: this.loggedInUser,
+        //   accountType: this.loggedInUser.accountType,
+        //   })
+        // })
+        this.loggedInUser = null;
+      }
+      
 
       this.#navigateTo('login');
     });
@@ -157,8 +161,9 @@ export class App {
       this.loggedInUser = user;
       await this.db.modifyUser(user, accountType);
       localStorage.setItem('loggedInUser', JSON.stringify(user));
-      await this.renderUI();
+      console.log("Login event");
       if (accountType === 'applicant') {
+        await this.renderUI();
         this.#navigateTo('jobBoard');
       }
       else {
@@ -172,7 +177,7 @@ export class App {
     //   this.#navigateTo(initialView);
     // } else {
     if (this.loggedInUser) {
-      console.log("logged in user", this.loggedInUser);
+      console.log("logged in user", this.loggedInUser.accountType);
       if (this.loggedInUser.accountType === 'applicant') {
         this.#navigateTo('jobBoard');
       }
@@ -212,6 +217,7 @@ export class App {
       if (this.jobs.length === 0) {
         this.jobs = jobSpoof();
       }
+      console.log("YAY", this.jobs);
       this.#jobListElm = await new jobList(this.jobs).render();
       this.#curJobElm = await new CurrentJob(this.jobs[0]).render();
       this.#curJobElm.id = `job-${this.jobs[0]._id}`;
@@ -221,7 +227,7 @@ export class App {
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
 
-      this.#mainViewElm.appendChild(this.#jobBoardViewElm);
+      this.#mainViewElm.appendChild(this.#jobBoardViewElm); 
     } else if (view === 'applications') {
       
         if (!this.loggedInUser) {

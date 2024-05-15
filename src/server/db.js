@@ -48,7 +48,7 @@ export async function getUser(id) {
 
 export async function modifyUser(user) {
   try {
-    const userwRev = await users.get(user._id);
+    const userwRev = await users.get(user._email);
     let password = userwRev.passwordHash;
     let salt = userwRev.salt;
     await users.remove(userwRev);
@@ -90,7 +90,7 @@ export async function addEmployer(employer, password) {
     console.log(employer);
 
     await employers.put({
-      _id: employer.getEmail(),
+      _id: employer.email,
       employer: employer,
       salt: salt,
       passwordHash: passwordHash,
@@ -103,7 +103,7 @@ export async function addEmployer(employer, password) {
 
 export async function modifyEmployer(employer) {
   try {
-    const employerwRev = await employers.get(employer._id);
+    const employerwRev = await employers.get(employer.email);
     let password = employerwRev.passwordHash;
     let salt = employerwRev.salt;
     await employers.remove(employerwRev);

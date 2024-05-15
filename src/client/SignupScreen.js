@@ -81,15 +81,16 @@ export class SignupScreen {
               employer: employer,
               password: password,
             }),
-          }).then((response) => {
+          }).then(async (response) => {
             if (response.ok) {
-              return response.json();
+              return await response.json();
             }
             alert('Employer already exists');
             throw new Error('Employer already exists');
           }).then((employer) => {
             console.log('Signup successful:', employer);
-            localStorage.setItem('loggedInUser', JSON.stringify(employee));
+            employer.accountType = 'employer';
+            localStorage.setItem('loggedInUser', JSON.stringify(employer));
             this.#events.publish('loggedIn', employer, accountType);
             this.#events.publish('navigateTo', 'jobBoard');
           });
@@ -107,14 +108,15 @@ export class SignupScreen {
               user: user,
               password: password,
             })
-          }).then((response) => {
+          }).then(async (response) => {
             if (response.ok) {
-              return response.json();
+              return (await response.json());
             }
             alert('User already exists');
             throw new Error('User already exists');
           }).then((user) => {
             console.log('Signup successful:', user);
+            user.accountType = 'applicant';
             localStorage.setItem('loggedInUser', JSON.stringify(user));
             this.#events.publish('loggedIn', user, accountType);
             this.#events.publish('navigateTo', 'jobBoard');

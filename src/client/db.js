@@ -64,7 +64,6 @@ export async function getUser() {
 
   try{
     const user = await database.get("user");
-    console.log(user.user);
     return user.user;
   }
   catch(err){
@@ -117,9 +116,8 @@ export async function loadJobs() {
  * @throws {Error} - Throws an error if the operation fails
  */
 export async function clearDB(){
-  database.destroy().then(
-    database = new PouchDB("JobsDB")
-  );
+  await database.destroy();
+  database = new PouchDB("JobsDB");
   // initDB();
 }
 

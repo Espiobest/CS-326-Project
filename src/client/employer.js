@@ -1,36 +1,36 @@
 export class Employer {
-    #name;
-    #location;
-    #description;
-    #email;
+    name;
+    location;
+    description;
+    email;
     constructor(name, location, description, email) {
-        this.#name = name;
-        this.#location = location;
-        this.#description = description;
-        this.#email = email;
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.email = email;
     }
     setName(name){
-        this.#name = name;
+        this.name = name;
     }
     getName(){
-        return this.#name;
+        return this.name;
     }
     setLocation(location){
-        this.#location = location;
+        this.location = location;
     }
     getLocation(){
-        return this.#location;
+        return this.location;
     }
     setDescription(description){
-        this.#description = description;
+        this.description = description;
     }
     getDescription(){
-        return this.#description;
+        return this.description;
     }
     setEmail(email){
-        this.#email = email;
+        this.email = email;
     }
     getEmail(){
-        return this.#email;
+        return this.email;
     }   
 }
