@@ -6,9 +6,6 @@ export class Profile {
     // #description;
     // #email;
     constructor() {
-        this.#employer = new Employer('Residential Life', 'Berkshire House', '', 'omehta@umass.edu');
-        if (localStorage.getItem('profile-desc')) this.#employer.setDescription(localStorage.getItem('profile-desc'));
-        else localStorage.setItem('profile-desc', this.#employer.getDescription());
     }
 
     async setDescription(description){
@@ -29,7 +26,8 @@ export class Profile {
         return profileInput;
     }
 
-    async render() {
+    async render(user) {
+        this.#employer = new Employer(user.name, user.location, user.description, user.email);
         const div = document.createElement('div');
         div.classList.add('bg-pearl-white', 'p-3', 'shadow-md'); 
         div.innerHTML = /*html*/`

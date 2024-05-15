@@ -62,7 +62,6 @@ export class NewJob {
         }
         //create new job object
         const job = new Job (id.value, title.value, brief.value, pay.value, Array.from(skills.childNodes).map(s => s.value).filter(e => e), hours.value, location.value, description.value, workstudy.value, postingDate, hiringPeriod);
-        console.log('submit prints', job);
         //reset elements of form after submission
         this.clear();
         return job;
@@ -84,10 +83,6 @@ export class NewJob {
             document.getElementById('form-alert').innerText = '';
             const skillsList = document.getElementById('skills-list');
             job.skills.forEach(skill => {
-                // const skillItem = document.createElement('div');
-                // skillItem.textContent = skill;
-                // skillsList.appendChild(skillItem);
-                // console.log(skillsList);
                 const skillElement = document.createElement('span');
                 skillElement.classList.add('rounded-lg', 'text-white', 'px-2', 'mt-2');
                 skillElement.style.backgroundColor = 'crimson';

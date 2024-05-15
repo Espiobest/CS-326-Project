@@ -1,5 +1,10 @@
+import { Events } from "../Events.js";
+
+
 export class NavBar {
+    #events;
     constructor() {
+        this.#events = Events.events();
     }
 
     async render() {
@@ -24,8 +29,15 @@ export class NavBar {
                 <img class="w-24 h-24 rounded-full bg-rosewood hover:bg-burgundy focus:bg-burgundy" src="./assets/profile.svg" alt="User Profile Picture">
             </a>
         </div>
+        <button id="logout" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Logout</button>
         </div>
         `
+        
+        const logout = nav.querySelector('#logout');
+        logout.addEventListener('click', async e => {
+        e.preventDefault();
+        await this.#events.publish('logout');
+        });
         return nav;
     }
 }

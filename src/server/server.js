@@ -12,7 +12,7 @@ const headerFields = { "Content-Type": "application/json", "Access-Control-Allow
 
 export async function loadJobs(response) {
   try {
-    const list = (await db.loadJobs());
+    const list = (await db.loadAllJobs());
     response.writeHead(200, headerFields);
     response.write(JSON.stringify(list));
     response.end();
@@ -26,9 +26,9 @@ export async function loadJobs(response) {
 
 export async function addJob(job, response) {
   try {
-    await db.addJob(job);
+    await db.saveJob(job);
     response.writeHead(200, headerFields);
-    response.write("job added");
+    response.write(JSON.stringify(job));
     response.end();
   } catch (error) {
     console.error(error);
@@ -38,13 +38,11 @@ export async function addJob(job, response) {
   }
 }
 
-
-
 export async function modifyJob(job, response) {
   try {
     await db.modifyJob(job);
     response.writeHead(200, headerFields);
-    response.write("job modified");
+    response.write(JSON.stringify(job));
     response.end();
   } catch (error) {
     console.error(error);
@@ -72,7 +70,7 @@ export async function deleteJob(id, response) {
   try {
     await db.deleteJob(id);
     response.writeHead(200, headerFields);
-    response.write("job deleted");
+    response.write({message: "job deleted"});
     response.end();
   } catch (error) {
     console.error(error);
@@ -124,13 +122,11 @@ export async function addNewUser(user, password, response) {
 
 export async function addNewEmployer(employer, password, response) {
   try {
-    console.log("adding employer", employer);
     await db.addEmployer(employer, password);
     response.writeHead(200, headerFields);
     response.write(JSON.stringify(employer));
     response.end();
   } catch (error) {
-    console.log("error", error);
     response.writeHead(500, headerFields);
     response.write(error.message);
     response.end();
@@ -164,6 +160,7 @@ export async function deleteUser(id, response) {
     response.end();
   }
 }
+
 
 
 app.get('/jobs', async (req, res) => { 
@@ -208,7 +205,6 @@ app.post('/newUser', async (req, res) => {
 });
 
 app.post('/newEmployer', async (req, res) => {
-  console.log("BODY", req.body);
   const employer = req.body.employer;
   const password = req.body.password;
   await addNewEmployer(employer, password, res);
@@ -226,48 +222,15 @@ app.delete('/users/:id', async (req, res) => {
 
 app.delete('/deleteAll', async (req, res) => {
   await db.clearDB();
+  await db.deleteAll();
   res.writeHead(200, headerFields);
   res.write("deleted all");
   res.end();
 });
 
-// async function login(res, type, email, password){
-//   console.log("ttrying login");
-//   try {
-//     let userFromDB;
-//     if (type === "applicant") {
-//       userFromDB = await db.getUser(email);
-//       userFromDB.accountType = "applicant";
-//     }
-//     else{
-//       console.log("checking employer");
-//       userFromDB = await db.getEmployer(email);
-//       userFromDB.accountType = "employer";
-//     }
-//     console.log("userFromDB", userFromDB);
-//     let salt = userFromDB.salt;
-//     let hash = userFromDB.passwordHash;
-//     if (utils.validatePassword(password, salt, hash)) {
-//       console.log("passwords match")
-//       res.writeHead(200, headerFields);
-//       res.write(JSON.stringify(userFromDB));
-//       res.end();
-//     } else {
-//       console.log("incorrect password")
-//       res.writeHead(401, headerFields);
-//       res.write(JSON.stringify("incorrect password"));
-//       res.end();
-//     }
-//   } catch (error) {
-//     console.log("ERROR CHECKING");
-//     throw error;
-//   }
-// }
-
 app.post('/login', async (req, res) => {
   const email = req.body.email.trim();
   const password = req.body.password.trim();
-  console.log("email: ", email, "password: ", password);
   let userFromDB;
   try{
     userFromDB = await db.getUser(email);
@@ -284,18 +247,20 @@ app.post('/login', async (req, res) => {
       res.end();
     }
   }finally{
-    console.log("userFromDB", userFromDB);
-    let salt = userFromDB.salt;
-    let hash = userFromDB.passwordHash;
-    if (utils.validatePassword(password, salt, hash)) {
-      res.writeHead(200, headerFields);
-      res.write(JSON.stringify(userFromDB));
-      res.end();
-    } else {
-      res.writeHead(401, headerFields);
-      res.write(JSON.stringify("incorrect password"));
-      res.end();
+    if (userFromDB){
+      let salt = userFromDB.salt;
+      let hash = userFromDB.passwordHash;
+      if (utils.validatePassword(password, salt, hash)) {
+        res.writeHead(200, headerFields);
+        res.write(JSON.stringify(userFromDB));
+        res.end();
+      } else {
+        res.writeHead(401, headerFields);
+        res.write(JSON.stringify("incorrect password"));
+        res.end();
+      }
     }
+    
   }
 });
 

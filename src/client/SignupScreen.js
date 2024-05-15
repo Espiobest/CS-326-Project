@@ -17,7 +17,7 @@ export class SignupScreen {
     <div class="signup-screen bg-white flex justify-center">
     <div class="signup-form bg-red-600 p-8 rounded-lg shadow-md w-full max-w-md">
       <h2 class="text-xl sm:text-2xl mb-6 text-center text-black">Sign Up for JobsForUMass</h2>
-      <form id="signup" onSubmit="addUser()">
+      <form id="signup">
         <div class="mb-4">
           <label for="name" class="block mb-2 text-sm font-medium text-black">Name</label>
           <input type="text" id="name" required class="w-full px-3 py-2 bg-white text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -68,10 +68,8 @@ export class SignupScreen {
         const password = document.getElementById("signup-password").value;
         const accountType = [...document.querySelectorAll('input[name="account-type"]')].filter(input => input.checked)[0].value;
         const description = document.getElementById("description").value;
-        console.log(accountType);
         if (accountType === 'employer') {
           const employer = new Employer(name, country, description, email);
-          console.log(employer);
           fetch('http://localhost:4000/newEmployer', {
             method: 'POST',
             headers: {
@@ -98,7 +96,6 @@ export class SignupScreen {
         else{
           const id = Math.floor(Math.random() * 1000);
           const user = new User(id, name, 2026, email, country, description);
-          console.log(user);
           fetch('http://localhost:4000/newUser', {
             method: 'POST',
             headers: {
@@ -132,7 +129,4 @@ export class SignupScreen {
     return signupScreen;
   }
 
-  addUser() {
-    console.log("Adding user");
-  }
 }

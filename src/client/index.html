@@ -9,9 +9,32 @@
     <script src="//cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js"></script>
     <script src="https://unpkg.com/pdfobject"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type = "module">
+        tailwind.config = {
+          theme: {
+            extend: {
+                colors: {
+                    'charcoal': '#564d4a',
+                    'pearl-white': '#f7f4f3',
+                    'burgundy': '#7f1f3a',
+                    'rosewood': '#984b61',
+                    'crimson': '#ba1b1d',
+                    'coral-red': '#ff6663',
+                    transparent: 'transparent',
+                    current: 'currentColor',
+                    'sand': "#7a7170",
+                    "gray": {
+                        500: "#6b7280",
+                        700: "#374151"
+                    }
+                }
+            }
+          }
+        }
+    </script> 
     <script src="index.js" type="module"></script>
 </head>
-<body>
+<body style="overflow-y:scroll">
     <div id="root"></div>
 </body>
 </html>

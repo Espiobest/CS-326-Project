@@ -9,6 +9,8 @@ import { CurrentJob } from './currentJob.js';
 import { applications } from './applications.js';
 import { LoginScreen } from './LoginScreen.js';
 import { SignupScreen } from './SignupScreen.js';
+import { fetchEmployerDash } from './index2.js';
+
 
 export class App {
   #profileViewElm = null;
@@ -41,28 +43,7 @@ export class App {
     //   this.jobs = jobSpoof();
     //   await this.db.modifyJob(this.jobs);
     // }
-    this.rootElm = document.getElementById(root);
-    this.rootElm.innerHTML = '';
-
-    this.#loginScreen = new LoginScreen(this.#events, this.db);
-    this.#signupScreen = new SignupScreen(this.#events, this.db);
-
-    const navbarElm = document.createElement('div');
-    navbarElm.id = 'navbar';
-    const navbar = new NavBar('jobBoard');
-    navbarElm.appendChild(await navbar.render());
-
-    // navbarElm.appendChild(logoutButton);
-
-    this.#mainViewElm = document.createElement('div');
-    this.#mainViewElm.id = 'main-view';
-
-    this.#profileViewElm = document.createElement('div');
-    this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'overflow-y-auto', 'rounded', 'w-full');
-
-    this.rootElm.appendChild(navbarElm);
-    this.rootElm.appendChild(this.#mainViewElm);
-
+    await this.renderUI();
     this.#events.subscribe('navigateTo', (view) => {
       this.#navigateTo(view);
       navbar.view = view;
@@ -81,6 +62,7 @@ export class App {
       if (!this.#jobBoardViewElm){
         this.#jobBoardViewElm = document.createElement("div");
         this.#jobBoardViewElm.classList.add('flex');
+        this.#mainViewElm.appendChild(searchElm);
         this.#mainViewElm.appendChild(this.#jobBoardViewElm);
       }
       this.#jobBoardViewElm.removeChild(this.#curJobElm);
@@ -89,13 +71,11 @@ export class App {
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
     });
     this.#events.subscribe('applied to job', async (job) => {
-      console.log(job, this.jobs);
       if (this.jobs.length === 0) {
         this.jobs = jobSpoof();
         await this.db.modifyJob(this.jobs);
       }
       this.loggedInUser._jobsApplied.push(job);
-      console.log(this.loggedInUser);
 
       this.jobs = this.jobs.filter((jobListing) => {
         return !(JSON.stringify(job) === JSON.stringify(jobListing));
@@ -108,6 +88,7 @@ export class App {
         this.#jobBoardViewElm = document.createElement("div");
         this.#jobBoardViewElm.classList.add('flex');
         this.#jobBoardViewElm.appendChild(this.#curJobElm);
+        this.#mainViewElm.appendChild(searchElm);
         this.#mainViewElm.appendChild(this.#jobBoardViewElm);
         return;
       }
@@ -136,7 +117,6 @@ export class App {
     this.#events.subscribe('logout', async () => {
       this.loggedInUser = localStorage.getItem('loggedInUser');
       localStorage.removeItem('loggedInUser');
-      console.log("Logout clicked");
       await this.db.clearDB();
       if (this.loggedInUser) {
         // fetch('http://localhost:4000/logoutUser', {
@@ -151,8 +131,9 @@ export class App {
         // })
         this.loggedInUser = null;
       }
-      
 
+      this.rootElm.innerHTML = '';
+      await this.renderUI();
       this.#navigateTo('login');
     });
 
@@ -161,13 +142,13 @@ export class App {
       this.loggedInUser = user;
       await this.db.modifyUser(user, accountType);
       localStorage.setItem('loggedInUser', JSON.stringify(user));
-      console.log("Login event");
-      if (accountType === 'applicant') {
+      if (user.accountType === 'applicant') {
         await this.renderUI();
         this.#navigateTo('jobBoard');
       }
       else {
-        this.#navigateTo('applications');
+        await fetchEmployerDash();
+        // this.#navigateTo('applications');
       }
       
     });
@@ -177,12 +158,12 @@ export class App {
     //   this.#navigateTo(initialView);
     // } else {
     if (this.loggedInUser) {
-      console.log("logged in user", this.loggedInUser.accountType);
       if (this.loggedInUser.accountType === 'applicant') {
         this.#navigateTo('jobBoard');
       }
-      else {
-        this.#navigateTo('applications');
+      else if (this.loggedInUser.accountType === 'employer'){
+        fetchEmployerDash();
+        // this.#navigateTo('applications');
       }
     } else {
       this.#navigateTo('login');
@@ -204,6 +185,7 @@ export class App {
 
     this.#mainViewElm.innerHTML = '';
     if (view === 'jobBoard') {
+      
       if (!this.loggedInUser) {
         this.#navigateTo('login');
         return;
@@ -212,12 +194,14 @@ export class App {
       if (searchElm) {
         searchElm.style.display = 'flex';
       }
+      else{
+        searchElm = this.renderSearch();
+      }
       
       this.jobs = await this.db.loadJobs();
       if (this.jobs.length === 0) {
         this.jobs = jobSpoof();
       }
-      console.log("YAY", this.jobs);
       this.#jobListElm = await new jobList(this.jobs).render();
       this.#curJobElm = await new CurrentJob(this.jobs[0]).render();
       this.#curJobElm.id = `job-${this.jobs[0]._id}`;
@@ -226,6 +210,7 @@ export class App {
 
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
+      this.#mainViewElm.appendChild(searchElm);
 
       this.#mainViewElm.appendChild(this.#jobBoardViewElm); 
     } else if (view === 'applications') {
@@ -234,7 +219,6 @@ export class App {
           this.#navigateTo('login');
           return;
         }
-        console.log("app", this.loggedInUser)
         this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
 
         if (this.#applicationsViewElm && this.#applicationsViewElm.firstChild && this.#applicationsViewElm.firstChild.id !== "reset"){
@@ -299,7 +283,6 @@ export class App {
         searchElm.style.display = 'none';
       }
       this.#mainViewElm.innerHTML = '';
-      console.log("rendering login", this.#mainViewElm);
       this.#mainViewElm.appendChild(await this.#loginScreen.render());
     } else if (view === 'signup') {
       let searchElm = document.getElementById('search-bar');
@@ -312,7 +295,8 @@ export class App {
     window.location.hash = view;
   }
 
-  async renderUI(){
+  renderSearch(){
+
     const searchElm = document.createElement('div');
     searchElm.style.display = 'flex';
     searchElm.id = 'search-bar';
@@ -439,10 +423,37 @@ export class App {
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
     });
 
-    this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
-    this.#applicationsViewElm.classList.add('overflow-y-auto');
-    
-    this.#navigateTo('jobBoard');
+    return searchElm;
+  }
 
+  async renderUI(){
+    this.rootElm = document.getElementById("root");
+    this.rootElm.innerHTML = '';
+    
+    this.#loginScreen = new LoginScreen(this.#events, this.db);
+    this.#signupScreen = new SignupScreen(this.#events, this.db);
+
+    const navbarElm = document.createElement('div');
+    navbarElm.id = 'navbar';
+    const navbar = new NavBar('jobBoard');
+    navbarElm.appendChild(await navbar.render());
+
+    // navbarElm.appendChild(logoutButton);
+
+    this.#mainViewElm = document.createElement('div');
+    this.#mainViewElm.id = 'main-view';
+
+    this.#profileViewElm = document.createElement('div');
+    this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'overflow-y-auto', 'rounded', 'w-full');
+
+    this.rootElm.appendChild(navbarElm);
+    this.rootElm.appendChild(this.#mainViewElm);
+
+    this.renderSearch();
+    if (this.loggedInUser){
+      this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
+      this.#applicationsViewElm.classList.add('overflow-y-auto');
+    }
+    
   }
 }

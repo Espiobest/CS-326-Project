@@ -60,16 +60,23 @@ export class LoginScreen {
             password: this.password,
           }),
         })
-        .then(res=>res.json())
+        .then(async (res)=>await res.json())
         .then(async (user) => {
-          user = user.employer;
+          if (user.accountType === 'applicant'){
+            user.user.accountType = 'applicant';
+            user = user.user;
+          }
+          else{
+            user.employer.accountType = 'employer';
+            user = user.employer;
+          }
           localStorage.setItem('loggedInUser', JSON.stringify(user));
           await this.db.modifyUser(user);
           this.#events.publish('loggedIn', user, user.accountType);
           this.#events.publish('navigateTo', 'jobBoard');
         })
-        .catch(() => {
-          console.log('Login failed: Invalid email or password')
+        .catch((err) => {
+          console.log('Login failed: Invalid email or password', err);
         })
 
         // const user = await this.db.loginUser(this.email, this.password);

@@ -8,11 +8,6 @@ import { DashboardFunc } from "./components/DashboardFunc.js";
 // import { jobsDB } from '../server/db.js';
 // import { backend } from '../server/db.js'
 
-const URL = "http://localhost:3260/jobs";
-fetch(URL).then(response => {
-    console.log(response);
-})
-
 export class App {
     #rootElem;
     #navbarElem;
@@ -20,16 +15,19 @@ export class App {
     #dashboardElem;
     #newJobElem;
     #jobs;
+    #user;
     constructor (){
         this.#rootElem = null;
         this.#navbarElem = null;
         this.#profileElem = null;
         this.#dashboardElem = null;
         this.#newJobElem = null;
-        this.#jobs = new db('jobs');
+        this.#jobs = new db('jobpost');
+        this.#user = null;
     }
     async render(root){
         //set root element
+        this.#user = JSON.parse(localStorage.getItem('loggedInUser'));
         this.#rootElem = document.getElementById(root);
         this.#rootElem.innerHTML = '';
         
@@ -44,7 +42,7 @@ export class App {
         this.#profileElem.id = "profile";
         this.#profileElem.classList.add("hidden");
         const profile = new Profile(); //create profile component
-        this.#profileElem.appendChild(await profile.render());
+        this.#profileElem.appendChild(await profile.render(this.#user));
         this.#rootElem.appendChild(this.#profileElem);
 
         //set dashboard Elem
@@ -208,7 +206,7 @@ export class App {
                 const curDesc = localStorage.getItem('profile-desc');
                 if (descToSet !== curDesc){
                     localStorage.setItem('profile-desc', descToSet);
-                    await profile.render();
+                    await profile.render(this.#user);
                     alert('saved successfully!');
                 }
             }
