@@ -89,7 +89,7 @@ export class SignupScreen {
             throw new Error('Employer already exists');
           }).then((employer) => {
             console.log('Signup successful:', employer);
-            localStorage.setItem('user', JSON.stringify(employee));
+            localStorage.setItem('loggedInUser', JSON.stringify(employee));
             this.#events.publish('loggedIn', employer, accountType);
             this.#events.publish('navigateTo', 'jobBoard');
           });
@@ -115,7 +115,7 @@ export class SignupScreen {
             throw new Error('User already exists');
           }).then((user) => {
             console.log('Signup successful:', user);
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
             this.#events.publish('loggedIn', user, accountType);
             this.#events.publish('navigateTo', 'jobBoard');
           });

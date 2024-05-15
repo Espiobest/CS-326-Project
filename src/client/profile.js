@@ -27,8 +27,11 @@ export class Profile {
             </div>
             <input id="ps" type="text" class="align-center border-2 border-gray-200 rounded-lg p-2 w-full"></input>
             <h2 class="text-lg text-center font-bold">Resume</h2>
-            <div class="text-center border-2 border-gray-200 rounded-lg w-full" id="resume" style="height: 10%">
-                Upload Here <i class="fa fa-upload" aria-hidden="true"></i>
+            <div class="text-center border-2 border-gray-200 rounded-lg w-full h-full">
+                <input id="resume" type="file" accept=".pdf">
+                <div id="resumeDiv" style="width: 100%; height: 100%">
+                
+                </div>
             </div>
             <button id="submit" class="rounded-lg bg-rose-900 text-white p-2 mt-2">Save</button>
         `;

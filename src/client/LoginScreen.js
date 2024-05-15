@@ -62,7 +62,6 @@ export class LoginScreen {
         })
         .then(res=>res.json())
         .then(async (user) => {
-          // if ()
           user = user.user;
           console.log('Login successful:', user);
           localStorage.setItem('loggedInUser', JSON.stringify(user));

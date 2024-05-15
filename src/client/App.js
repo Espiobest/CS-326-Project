@@ -24,7 +24,6 @@ export class App {
   constructor() {
     this.db = db;
     this.db.initDB();
-    this.user = null;
     this.#events = Events.events();
     this.jobs = null;
     this.loggedInUser = null;
@@ -32,7 +31,7 @@ export class App {
 
   async render(root) {
     const storedUser = localStorage.getItem('loggedInUser');
-    if (storedUser) {
+    if (storedUser && storedUser != "undefined") {
       this.loggedInUser = JSON.parse(storedUser);
     }
 
@@ -58,6 +57,9 @@ export class App {
     this.#mainViewElm = document.createElement('div');
     this.#mainViewElm.id = 'main-view';
 
+    this.#profileViewElm = document.createElement('div');
+    this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'overflow-y-auto', 'rounded', 'w-full');
+
     this.rootElm.appendChild(navbarElm);
     this.rootElm.appendChild(this.#mainViewElm);
 
@@ -74,7 +76,12 @@ export class App {
             document.getElementById(`job-${job._id}`).style.backgroundColor = 'lightgray';
           }
         }
-       
+      }
+  
+      if (!this.#jobBoardViewElm){
+        this.#jobBoardViewElm = document.createElement("div");
+        this.#jobBoardViewElm.classList.add('flex');
+        this.#mainViewElm.appendChild(this.#jobBoardViewElm);
       }
       this.#jobBoardViewElm.removeChild(this.#curJobElm);
       this.#curJobElm = await new CurrentJob(job).render();
@@ -82,10 +89,13 @@ export class App {
       this.#jobBoardViewElm.appendChild(this.#curJobElm);
     });
     this.#events.subscribe('applied to job', async (job) => {
+      console.log(job, this.jobs);
       if (this.jobs.length === 0) {
         this.jobs = jobSpoof();
         await this.db.modifyJob(this.jobs);
       }
+      this.loggedInUser._jobsApplied.push(job);
+      console.log(this.loggedInUser);
 
       this.jobs = this.jobs.filter((jobListing) => {
         return !(JSON.stringify(job) === JSON.stringify(jobListing));
@@ -98,18 +108,16 @@ export class App {
         this.#jobBoardViewElm = document.createElement("div");
         this.#jobBoardViewElm.classList.add('flex');
         this.#jobBoardViewElm.appendChild(this.#curJobElm);
-        this.#jobBoardViewElm.appendChild(this.#curJobElm);
         this.#mainViewElm.appendChild(this.#jobBoardViewElm);
         return;
       }
 
       await this.db.modifyJob(this.jobs);
-      this.user._jobsApplied.push(job);
-      console.log(this.user._jobsApplied);  
-      await this.db.modifyUser(this.user, this.loggedInUser.accountType);
+     
+      await this.db.modifyUser(this.loggedInUser, this.loggedInUser.accountType);
       this.#jobBoardViewElm.removeChild(this.#curJobElm);
       this.#jobBoardViewElm.removeChild(this.#jobListElm);
-      this.#applicationsViewElm = await new jobList(this.user._jobsApplied, 'application').render();
+      this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
 
       this.#curJobElm = await new CurrentJob(this.jobs[0]).render();
       this.#jobListElm = await new jobList(this.jobs).render();
@@ -128,8 +136,19 @@ export class App {
     this.#events.subscribe('logout', async () => {
       localStorage.removeItem('loggedInUser');
       console.log("Logout clicked");
-      this.loggedInUser = null;
       await this.db.clearDB();
+      fetch('http://localhost:4000/logoutUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: this.loggedInUser,
+          accountType: this.loggedInUser.accountType,
+        })
+      })
+      this.loggedInUser = null;
+
       this.#navigateTo('login');
     });
 
@@ -168,9 +187,15 @@ export class App {
 
   async #navigateTo(view) {
     this.jobs = await this.db.loadJobs();
-    console.log("navigateTo here");
-    this.user = await this.db.getUser();
-    this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (!this.loggedInUser){
+      let user = localStorage.getItem('loggedInUser')
+      if (user && user != "undefined") {
+        this.loggedInUser = JSON.parse(user);
+      }
+      else{
+        this.loggedInUser = this.db.getUser();
+      }
+    }
 
     this.#mainViewElm.innerHTML = '';
     if (view === 'jobBoard') {
@@ -183,55 +208,85 @@ export class App {
         searchElm.style.display = 'flex';
       }
       
-    this.jobs = await this.db.loadJobs();
-    if (this.jobs.length === 0) {
-      this.jobs = jobSpoof();
-      await this.db.modifyJob(this.jobs);
-    }
-    this.#jobListElm = await new jobList(this.jobs).render();
-    this.#curJobElm = await new CurrentJob(this.jobs[0]).render();
-    this.#curJobElm.id = `job-${this.jobs[0]._id}`;
-    this.#jobBoardViewElm = document.createElement("div");
-    this.#jobBoardViewElm.classList.add('flex');
+      this.jobs = await this.db.loadJobs();
+      if (this.jobs.length === 0) {
+        this.jobs = jobSpoof();
+      }
+      this.#jobListElm = await new jobList(this.jobs).render();
+      this.#curJobElm = await new CurrentJob(this.jobs[0]).render();
+      this.#curJobElm.id = `job-${this.jobs[0]._id}`;
+      this.#jobBoardViewElm = document.createElement("div");
+      this.#jobBoardViewElm.classList.add('flex');
 
-    this.#jobBoardViewElm.appendChild(this.#jobListElm);
-    this.#jobBoardViewElm.appendChild(this.#curJobElm);
+      this.#jobBoardViewElm.appendChild(this.#jobListElm);
+      this.#jobBoardViewElm.appendChild(this.#curJobElm);
 
-      console.log("rendering jobboard", this.#jobBoardViewElm);
       this.#mainViewElm.appendChild(this.#jobBoardViewElm);
     } else if (view === 'applications') {
-      if (!this.loggedInUser) {
-        this.#navigateTo('login');
-        return;
-      }
-      let searchElm = document.getElementById('search-bar');
-      if (searchElm) {
-        searchElm.style.display = 'none';
-      }
-    } else if (view === 'profile') {
-      if (!this.loggedInUser) {
-        this.#navigateTo('login');
-        return;
-      }
-      let searchElm = document.getElementById('search-bar');
-      if (searchElm) {
-        searchElm.style.display = 'none';
-      }
       
-      this.#profileViewElm = document.createElement('div');
-      this.#profileViewElm.classList.add('flex', 'flex-col', 'align-center', 'bg-white', 'overflow-y-auto', 'rounded', 'w-full');
-      this.#profileViewElm.innerHTML = new Profile().render(this.loggedInUser);
-      this.#mainViewElm.appendChild(this.#profileViewElm);
+        if (!this.loggedInUser) {
+          this.#navigateTo('login');
+          return;
+        }
+        console.log("app", this.loggedInUser)
+        this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
 
-      document.getElementById('ps').value = this.user._personalStatement || "Enter a personal statement here";
-      document.getElementById('submit').addEventListener('click', async (e) => {
-        this.user._personalStatement = document.getElementById('ps').value;
-        await this.db.modifyUser(this.user, this.loggedInUser.accountType);
-        alert('Personal statement saved');
-      });
-      document.getElementById('resume').addEventListener('click', (e) => {
-        alert('Not implemented yet');
-      });
+        if (this.#applicationsViewElm && this.#applicationsViewElm.firstChild && this.#applicationsViewElm.firstChild.id !== "reset"){
+          const resetButton = document.createElement('button');
+          resetButton.id = "reset"
+          resetButton.textContent = 'Reset';
+          resetButton.addEventListener('click', async () => {
+            this.loggedInUser._jobsApplied = [];
+
+            this.jobs = jobSpoof();
+            this.#navigateTo('jobBoard');
+            window.location.reload(true);
+          });
+          this.#applicationsViewElm.insertBefore(resetButton, this.#applicationsViewElm.firstChild);
+        }
+        this.#mainViewElm.appendChild(this.#applicationsViewElm);
+        let searchElm = document.getElementById('search-bar');
+        if (searchElm){
+          searchElm.style.display = 'none';
+        }
+        
+    } else if (view === 'profile') {
+        if (!this.loggedInUser) {
+          this.#navigateTo('login');
+          return;
+        }
+        this.#profileViewElm.innerHTML = new Profile().render(this.loggedInUser);
+        this.#mainViewElm.appendChild(this.#profileViewElm);
+      
+        let searchElm = document.getElementById('search-bar');
+        if (searchElm){
+          searchElm.style.display = 'none';
+        }
+        
+        if (this.loggedInUser._resume){
+          // add remove button
+          let removeButton = document.createElement('button');
+          removeButton.textContent = 'Remove Resume';
+          this.#profileViewElm.appendChild(removeButton);
+          removeButton.addEventListener('click', async e => {
+            this.loggedInUser._resume = null;
+            await this.db.modifyUser(this.loggedInUser);
+            document.getElementById('resumeDiv').innerHTML = '';
+          });
+          PDFObject.embed(URL.createObjectURL(this.loggedInUser._resume), "#resumeDiv");
+        }
+  
+        document.getElementById('ps').value = this.loggedInUser._personalStatement || "Enter a personal statement here";
+        document.getElementById('submit').addEventListener('click', async e => {
+          this.loggedInUser._personalStatement = document.getElementById('ps').value;
+          let resume = document.getElementById('resume').files;
+          if (resume.length > 0){
+            this.loggedInUser._resume = resume[0];
+          }
+          await this.db.modifyUser(this.loggedInUser);
+          alert('User details saved');
+        });
+
     } else if (view === 'login') {
       let searchElm = document.getElementById('search-bar');
       if (searchElm) {
@@ -330,7 +385,7 @@ export class App {
       this.#jobListElm = await new jobList(this.jobs.filter(job => job._title.toLowerCase().includes(filter) || job._brief.toLowerCase().includes(filter))).render();
       this.#jobBoardViewElm.innerHTML = '';
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
-      this.#jobBoardViewElm.appendChild(curJobElm);
+      this.#jobBoardViewElm.appendChild(this.#curJobElm);
       this.#mainViewElm.appendChild(this.#jobBoardViewElm);
     });
 
@@ -375,20 +430,13 @@ export class App {
       this.#jobListElm = await new jobList(filteredJobs).render();
       this.#jobBoardViewElm.innerHTML = '';
       this.#jobBoardViewElm.appendChild(this.#jobListElm);
-      this.#jobBoardViewElm.appendChild(curJobElm);
+      this.#jobBoardViewElm.appendChild(this.#curJobElm);
     });
 
-    this.#applicationsViewElm = await new jobList(this.user._jobsApplied, 'application').render();
+    this.#applicationsViewElm = await new jobList(this.loggedInUser._jobsApplied, 'application').render();
     this.#applicationsViewElm.classList.add('overflow-y-auto');
-    if (this.#applicationsViewElm.firstChild && this.#applicationsViewElm.firstChild.id !== "reset") {
-      const resetButton = document.createElement('button');
-      resetButton.id = "reset";
-      resetButton.textContent = 'Reset';
-      resetButton.addEventListener('click', async () => {
-        await this.#events.publish('reset');
-      });
-      this.#applicationsViewElm.insertBefore(resetButton, this.#applicationsViewElm.firstChild);
-    }
-    this.#mainViewElm.appendChild(this.#applicationsViewElm);
+    
+    this.#navigateTo('jobBoard');
+
   }
 }

@@ -290,6 +290,22 @@ app.post('/login', async (req, res) => {
   }  
 });
 
+app.post('/logoutUser', async (req, res) => {
+  const user = req.body.user;
+  const accountType = req.body.accountType;
+  console.log(user);
+  if (accountType === "applicant") {
+    await db.modifyUser(user);
+  }
+  else{
+    await db.modifyEmployer(user);
+  }
+  res.writeHead(200, headerFields);
+  res.write("logged out");
+  res.end();
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

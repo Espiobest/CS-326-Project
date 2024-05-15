@@ -39,6 +39,7 @@ export async function modifyJob(jobList) {
   * is a database issue.
 */
 export async function modifyUser(user, accountType) {
+  console.log(user, accountType);
   database.get('user').then(function(doc) {
     database.put({
       _id: 'user',

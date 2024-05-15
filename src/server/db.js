@@ -5,7 +5,6 @@ import * as utils from "./utils.js";
 import PouchDB from "pouchdb";
 var users = new PouchDB("users");
 var employers = new PouchDB("employers");
-var jobs = new PouchDB("jobs");
 
 // export async function initDB(){
 //   // users.info().then(async function (result) {
@@ -21,59 +20,6 @@ var jobs = new PouchDB("jobs");
 // }
 
 
-export async function loadJobs() {
-  try {
-    const list = (await jobs.allDocs({include_docs: true})).rows.map(row => row.doc);
-    return list;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function addJob(job) {
-  try {
-    console.log(job);
-    await jobs.put(job);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-
-
-export async function modifyJob(job) {
-  try {
-    const jobwRev = await jobs.get(job._id);
-    await jobs.remove(jobwRev);
-    
-    await jobs.put(job);
-    
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function getJob(id) {
-  try {
-    return jobs.get(id);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function deleteJob(id) {
-  try {
-    const job = await jobs.get(id);
-    await jobs.remove(job);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
 export async function addUser(user, password) {
   try {
     const {salt, passwordHash} = utils.saltHashPassword(password);
@@ -195,6 +141,5 @@ export async function clearDB(){
   await jobs.destroy();
   users = new PouchDB("users");
   employers = new PouchDB("employers");
-  jobs = new PouchDB("jobs");
   // initDB();
 }
