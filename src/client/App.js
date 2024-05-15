@@ -6,7 +6,6 @@ import * as db from "./db.js";
 import { Events } from './Events.js';
 import { jobList } from './jobList.js';
 import { CurrentJob } from './currentJob.js';
-import { applications } from './applications.js';
 import { LoginScreen } from './LoginScreen.js';
 import { SignupScreen } from './SignupScreen.js';
 import { fetchEmployerDash } from './index2.js';

@@ -2,7 +2,7 @@
 
 ## How to run
 
--  **`npm run server`**: runs **`npm run milestone-02`** and
+-  **`npm run start`**: runs the server and the frontend for milestone 3
 
 -  **`npm run milestone-01`**: renders documentation including information about team, and initial goals for project
 
@@ -26,18 +26,19 @@ You are greeted by the Job list view on the left and expanded listing that we're
   
 
 ## File tour
-
+A list of main files and their uses is given below.
+- Client: 
 *  `App.js`: Where the code code for each view comes together and is stored
+
+*  `EmployeeApp.js`: Where the code for the employer view comes in, just to separate the views
 
 *  `jobList.js` & `jobListItem.js`: Class to render job list in the application section, and the jobs section
 
-*  `application.js`: Class for applications view, just a lit of applied jobs...for now
-
-*  `currentJob.js`:
+*  `currentJob.js`: Class to render the current job on the right side of the job view page
 
 *  `Events.js`: The singleton class to that allows for publishing and subscribing to events
 
-*  `db.js`: The class tha contains methods for storing data using PouchDB
+*  `db.js`: The class that contains methods for storing persistent data on client-side using PouchDB
 
 *  `index.html`: The place where all the code is injects
 
@@ -48,3 +49,7 @@ You are greeted by the Job list view on the left and expanded listing that we're
 *  `profile.js`: Profile view
 
 *  `user.js` user class
+
+- Server:
+*  `server.js`: CRUD API to handle the backend requests and set up the Express.js server
+*  `db.js`: Handle the backend database. Houses the databases to store the list of users, employers and jobs in the backend.

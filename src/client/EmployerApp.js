@@ -5,8 +5,7 @@ import { NewJob } from './components/NewJob.js';
 import { CurJob } from "./components/CurJob.js";
 import { db } from './utilities/db.js';
 import { DashboardFunc } from "./components/DashboardFunc.js";
-// import { jobsDB } from '../server/db.js';
-// import { backend } from '../server/db.js'
+
 
 export class App {
     #rootElem;
